@@ -11,6 +11,9 @@ import java.util.List;
 
 public interface PartsDAO
 {
-    Part getByTitle(String title);
+    List<Part> deletePart(int id );
+    List<Part> addPart(Part part );
+    List<Part> updatePart(Part part );
+    Part getPart( int id );
     List<Part> getAllParts();
 }

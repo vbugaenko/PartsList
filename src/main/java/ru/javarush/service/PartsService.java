@@ -16,11 +16,6 @@ public class PartsService
 {
     private PartsDAOImpl partsDAOimpl = new PartsDAOImpl();
 
-    public Part getPart(String title)
-    {
-        return partsDAOimpl.getByTitle( title );
-    }
-
     public List<Part> getAllParts()
     {
         return partsDAOimpl.getAllParts();

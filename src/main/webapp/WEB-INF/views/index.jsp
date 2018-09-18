@@ -21,8 +21,10 @@
     <c:forEach var="part" items="${parts}" varStatus="loopStatus" begin="${beginInt}" end="${endInt}">
     <tr style="background-color: ${loopStatus.index % 2 == 0 ? '#F7F8E0;/>' : '#D8D8D8;/>'}">
         <td align="right">${part.getId()} </td>
-        <td>${part.getTitle()}</td>
-        <td>${part.getType()}</td>
+        <td align="left" >${part.getTitle()}</td>
+        <td></td>
+        <td>${part.getAmount()}</td>
+        <td>${part.getPrice()}</td>
     </tr>
     </c:forEach>
 </table>

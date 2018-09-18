@@ -23,12 +23,62 @@ public class PartsDAOImpl implements PartsDAO
     final Logger loggerConsoleInf = Logger.getLogger("consoleinf");
 
     @Override
-    public Part getByTitle(String title)
+    public List<Part> deletePart(int id)
+    {
+        try (Session session = cfg.buildSessionFactory().openSession())
+        {
+            session.beginTransaction();
+            Part part = session.get(Part.class, id);
+            session.remove(part);
+            session.getTransaction().commit();
+            session.close();
+        }
+        return getAllParts();
+    }
+
+    @Override
+    public List<Part> addPart(Part part)
+    {
+        try (Session session = cfg.buildSessionFactory().openSession())
+        {
+            session.beginTransaction();
+            session.save(part);
+            session.getTransaction().commit();
+            session.close();
+        }
+        return getAllParts();
+    }
+
+    @Override
+    public List<Part> updatePart(Part newPart)
+    {
+        try (Session session = cfg.buildSessionFactory().openSession())
+        {
+            session.beginTransaction();
+            /*
+            Part part = session.get(Part.class, newPart.getId());
+            part.setTitle(newPart.getTitle());
+            part.setCategory(newPart.getCategory());
+            part.setAmount(newPart.getAmount());
+            part.setPrice(newPart.getPrice());
+            */
+            session.update(newPart);
+            session.getTransaction().commit();
+            session.close();
+        }
+        catch(Exception e)
+        { loggerFileInf.error(e.getMessage()); }
+        return getAllParts();
+    }
+
+
+    @Override
+    public Part getPart(int id)
     {
         Part part = null;
         try (Session session = cfg.buildSessionFactory().openSession())
         {
-            part = session.get(Part.class, title);
+            part = session.get(Part.class, id);
             session.getTransaction().commit();
         }
         catch (Exception e)
@@ -39,7 +89,6 @@ public class PartsDAOImpl implements PartsDAO
     @Override
     public List<Part> getAllParts()
     {
-        System.out.println("Выдать данные о всех запчастях");
         List<Part> parts = new ArrayList();
         try ( Session session = cfg.buildSessionFactory().openSession() )
         {
@@ -49,10 +98,7 @@ public class PartsDAOImpl implements PartsDAO
             session.close();
         }
         catch (Exception e)
-        {
-            System.out.println(e.getMessage());
-            //loggerFileInf.error(e.getMessage());
-        }
+        { loggerFileInf.error(e.getMessage()); }
         return parts;
     }
 }

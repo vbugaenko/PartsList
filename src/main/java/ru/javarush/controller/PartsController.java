@@ -30,7 +30,7 @@ public class PartsController
     {
         model.addAttribute("parts",     parts   );
         model.addAttribute("beginInt",  0    );
-        model.addAttribute("endInt",    10   );
+        model.addAttribute("endInt",    9   );
         model.addAttribute("page",      1   );
 
         return "index";

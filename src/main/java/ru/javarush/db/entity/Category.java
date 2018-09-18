@@ -14,10 +14,10 @@ public class Category
 {
     @Id
     @Column(name = "id")
-    public int id;
-    public String title;
+    private int id;
+    private String title;
     @OneToMany(mappedBy = "category", fetch = FetchType.EAGER)
-    public List<Part> parts;
+    private List<Part> parts;
 
     public int getId()           { return id;    }
     public String getTitle()     { return title; }

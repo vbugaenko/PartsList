@@ -16,50 +16,32 @@ public class Part
 {
   @Id
   @Column(name = "id")
-  public int id;
-  public String title;
-  private int type;
-  public int amount;
+  private int id;
+  private String title;
+  private int amount;
+  private Category category;
+  private long price;
 
-  public int getId() {
-    return id;
-  }
+  public int getId()                         { return id;       }
+  public String getTitle()                   { return title;    }
+  public int getAmount()                     { return amount;   }
+  public Category getCategory()              { return category; }
+  public long getPrice()                     { return price;    }
 
-  public void setId(int id) {
-    this.id = id;
-  }
-
-  public String getTitle() {
-    return title;
-  }
-
-  public void setTitle(String title) {
-    this.title = title;
-  }
-
-  public int getType() {
-    return type;
-  }
-
-  public void setType(int type) {
-    this.type = type;
-  }
-
-  public int getAmount() {
-    return amount;
-  }
-
-  public void setAmount(int amount) {
-    this.amount = amount;
-  }
+  public void setId(int id)                  { this.id = id;             }
+  public void setTitle(String title)         { this.title = title;       }
+  public void setAmount(int amount)          { this.amount = amount;     }
+  public void setCategory(Category category) { this.category = category; }
+  public void setPrice(long price)           { this.price = price;       }
 
   @Override
   public String toString() {
     return "Part{" +
             "id=" + id +
             ", title='" + title + '\'' +
-            ", type=" + type +
             ", amount=" + amount +
+            ", category=" + category +
+            ", price=" + price +
             '}';
   }
 }

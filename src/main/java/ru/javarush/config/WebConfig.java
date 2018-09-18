@@ -1,0 +1,42 @@
+package ru.javarush.config;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.view.InternalResourceViewResolver;
+import org.springframework.web.servlet.view.JstlView;
+
+/**
+ * @author Victor Bugaenko
+ * @since 18.09.2018
+ */
+
+@Configuration
+@EnableWebMvc   // включает Spring MVC без дополнительных xml настроек
+@ComponentScan("ru.javarush.controller")
+public class WebConfig extends WebMvcConfigurerAdapter
+{
+    // в Spring существует 2 способа обработки статических ресурсов
+    // но подход "Сервлет по умолчанию" (configureDefaultServletHandling) не подходит
+    // для обслуживания статических ресурсов поэтому используем именно метод addResourceHandlers.
+    // при этом подразумевается, что каталог /resources находится в каталоге /webapp
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry)
+    {
+        registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
+    }
+
+    //бин типа ViewResolver помогает DispatcherServlet определить нужную JSP для отображения.
+    @Bean
+    public InternalResourceViewResolver setupViewResolver()
+    {
+        InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
+        viewResolver.setPrefix("/WEB-INF/views/");
+        viewResolver.setSuffix(".jsp");
+        viewResolver.setViewClass(JstlView.class);
+        return viewResolver;
+    }
+}

@@ -1,0 +1,46 @@
+
+html {
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    font-family: tahoma, sens-serif;
+    font-size: 14px;
+    background: transparent;
+    color: #777;
+    width: 100%;
+    height: 100%;
+}
+
+/* ~~~~~~~~~~~~~~~~~~~~~~~~ USERS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+.usersBlocks {
+    color:              black;
+    margin:             auto;
+    border:             1px solid black;
+    width:              1070px;
+    padding:            20px;
+    background-color:   white;
+    text-align:         center;
+    font-size:          12px;
+    font-family:        сourier;
+}
+
+.userCard {
+    margin:             20px;
+    border:             1px solid black;
+    width:              940px;
+    padding:            20px;
+    background-color:   white;
+}
+
+.tableHeader {
+    background-color: grey;
+    color: white;
+    text-align: center;
+}
+
+.whiteBG {
+    background-color: white;
+}

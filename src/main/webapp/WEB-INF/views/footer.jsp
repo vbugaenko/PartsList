@@ -5,9 +5,10 @@
 </div>
 
 <footer>
-    <div class="wrapper">
+        <center>
         <div class="info">© Victor Bugaenko, 2018</div>
-    </div>
+        </center>
+
 </footer>
 </div>
 

@@ -8,12 +8,8 @@
 
 <%@ include file="header.jsp" %>
 
-<form action="${pageContext.request.contextPath}/admin/usersList" method="get">
-    <input type="hidden" id="idForDelete" name="idForDelete"/>
-    <input type="hidden" id="idForUpdate" name="idForUpdate"/>
+<form action="${pageContext.request.contextPath}/" method="get">
     <input type="hidden" id="page"        name="page"/>
-    <input type="hidden" id="editID"      name="editID" value="${editId}"/>
-    <input type="hidden" id="activateID"  name="activateID"/>
 
     <div class="usersBlocks">
         <table>
@@ -27,7 +23,7 @@
             <c:forEach var="part" items="${parts}" varStatus="loopStatus" begin="${beginInt}" end="${endInt}">
                 <tr style="<c:if test="${!part.isSelected()}">color: silver;</c:if>
                         background-color: ${loopStatus.index % 2 == 0 ? '#F7F8E0;/>' : '#D8D8D8;/>'}">
-                <td align="left" class="whiteBG">
+                    <td align="left" class="whiteBG">
                         <button onclick="document.getElementById('idForDelete').value = '${part.getId()}';"
                                 style="padding: 0px;">
                             <img src="https://thumbs.dreamstime.com/b/rood-kruis-12263791.jpg" width="15" height="15">

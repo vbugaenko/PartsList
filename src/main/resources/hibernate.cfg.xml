@@ -18,6 +18,5 @@
         <property name="hibernate.hbm2ddl.auto">update</property>
         <property name="hibernate.show_sql">false</property>
         <mapping class="ru.javarush.db.entity.Part" />
-        <mapping class="ru.javarush.db.entity.Category" />
     </session-factory>
 </hibernate-configuration>

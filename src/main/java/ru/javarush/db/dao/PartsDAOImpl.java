@@ -55,13 +55,6 @@ public class PartsDAOImpl implements PartsDAO
         try (Session session = cfg.buildSessionFactory().openSession())
         {
             session.beginTransaction();
-            /*
-            Part part = session.get(Part.class, newPart.getId());
-            part.setTitle(newPart.getTitle());
-            part.setCategory(newPart.getCategory());
-            part.setAmount(newPart.getAmount());
-            part.setPrice(newPart.getPrice());
-            */
             session.update(newPart);
             session.getTransaction().commit();
             session.close();

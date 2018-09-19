@@ -13,13 +13,13 @@
     <input type="hidden" id="deleteID"   name="deleteID"/>
     <input type="hidden" id="activateID" name="activateID"/>
 
-    <div class="usersBlocks">
+    <div class="mainBlocks">
         <table>
             <tr class="tableHeader">
-                <td width="30 ">del </td>
-                <td>Наименование    </td>
-                <td>Необходимость   </td>
-                <td>Количество      </td>
+                <td width="30  ">del         </td>
+                <td width="300 ">Наименование</td>
+                <td>Необходимость            </td>
+                <td>Количество               </td>
             </tr>
 
             <c:forEach var="part" items="${parts}" varStatus="loopStatus" begin="${beginInt}" end="${endInt}">
@@ -47,15 +47,18 @@
         </table>
     </div>
 
-    <br/>
-    <p>Total: <b>${end}</b></p>
 
-    <div class="usersBlocks">
+    <div class="mainBlocks">
         <c:forEach var="part" items="${parts}" step="10">
             <c:set var="countB" value="${countB+1}"/>
             <button onclick="document.getElementById('page').value = '${countB}';">${countB}</button>
         </c:forEach>
     </div>
+
+    <div class="mainBlocks">
+        <p>Можно собрать: <b>${sborka}</b> компьютеров</p>
+    </div>
+
 </form>
 
 

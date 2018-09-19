@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import ru.javarush.db.entity.Part;
 import ru.javarush.service.PartsService;
 import ru.javarush.service.PartsServiceImpl;
 import ru.javarush.service.utility.IntFromStringImpl;
@@ -76,10 +77,20 @@ public class PartsController
         int end =   begin+limit-1;
 
 
+        int min = 0;
+        for(Part p : partsService.getAllParts())
+            if (p.isEnabled())
+            {
+                if ((min == 0)||(p.getAmount() < min))
+                    min = p.getAmount();
+            }
+
+
         model.addAttribute("parts",     partsService.getAllParts() );
         model.addAttribute("beginInt",  begin   );
         model.addAttribute("endInt",    end     );
         model.addAttribute("page",      pageInt );
+        model.addAttribute("sborka",    min     );
 
         return "index";
     }

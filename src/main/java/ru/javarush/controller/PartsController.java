@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import ru.javarush.service.PartsService;
 import ru.javarush.service.PartsServiceImpl;
+import ru.javarush.service.utility.IntFromStringImpl;
 import ru.javarush.service.utility.PageFromString;
 import ru.javarush.service.utility.PageFromStringImpl;
 
@@ -28,8 +29,8 @@ public class PartsController
             //@RequestParam(value = "filter",      required = false) String filter,
             @RequestParam(value = "page",        required = false) String page,
             //@RequestParam(value = "idForUpdate", required = false) String idForUpdate,
-            //@RequestParam(value = "idForDelete", required = false) String idForDelete,
-            //@RequestParam(value = "activateID",  required = false) String activateID,
+            @RequestParam(value = "deleteID", required = false) String deleteID,
+            @RequestParam(value = "activateID",  required = false) String activateID,
             //@RequestParam(value = "editID",      required = false) String editID,
             //@RequestParam(value = "editTitle",   required = false) String editTitle,
             //@RequestParam(value = "editPrice",   required = false) String editPrice,
@@ -52,9 +53,6 @@ public class PartsController
         if (editID != null)
             idEdttUser = intFromString.recognize(idForUpdate);
 
-        if (idForDelete != null)
-            usersListService.delete(idForDelete);
-
         if (activateID != null)
             usersListService.changeEnableStatus(activateID);
 
@@ -62,8 +60,15 @@ public class PartsController
             usersListService.update(editID, editInfo, editRole);
 */
 
-        int limit=10;
-        int pageInt = 2;
+        if ((deleteID != null)&&(!deleteID.equals("")))
+        {
+            int deleteIDint = new IntFromStringImpl().recognize(deleteID);
+            partsService.delete(deleteIDint);
+        }
+
+
+        int limit = 10;
+        int pageInt = 1;
         if ((page != null)&&(!page.equals("")))
             pageInt = pageFromString.recognize( page );
         int begin = (pageInt-1)*limit;

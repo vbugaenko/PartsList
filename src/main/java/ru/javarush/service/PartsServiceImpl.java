@@ -21,4 +21,10 @@ public class PartsServiceImpl implements PartsService
     {
         return partsDAOimpl.getAllParts();
     }
+
+    @Override
+    public void delete(int deleteID)
+    {
+        partsDAOimpl.deletePart(deleteID);
+    }
 }

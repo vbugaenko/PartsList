@@ -33,6 +33,8 @@ public class PartsDAOImpl implements PartsDAO
             session.getTransaction().commit();
             session.close();
         }
+        catch(Exception e)
+        { loggerFileInf.error(e.getMessage()); }
         return getAllParts();
     }
 
@@ -46,6 +48,8 @@ public class PartsDAOImpl implements PartsDAO
             session.getTransaction().commit();
             session.close();
         }
+        catch(Exception e)
+        { loggerFileInf.error(e.getMessage()); }
         return getAllParts();
     }
 

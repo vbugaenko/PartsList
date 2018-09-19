@@ -18,21 +18,18 @@ public class Part
   @Column(name = "id")
   private int id;
   private String title;
+  private boolean selected;
   private int amount;
-  private Category category;
-  private long price;
 
-  public int getId()                         { return id;       }
-  public String getTitle()                   { return title;    }
-  public int getAmount()                     { return amount;   }
-  public Category getCategory()              { return category; }
-  public long getPrice()                     { return price;    }
+  public int getId()                         { return id;                }
+  public String getTitle()                   { return title;             }
+  public boolean isSelected()                { return selected;          }
+  public int getAmount()                     { return amount;            }
 
   public void setId(int id)                  { this.id = id;             }
   public void setTitle(String title)         { this.title = title;       }
+  public void setSelected(boolean selected)  { this.selected = selected; }
   public void setAmount(int amount)          { this.amount = amount;     }
-  public void setCategory(Category category) { this.category = category; }
-  public void setPrice(long price)           { this.price = price;       }
 
   @Override
   public String toString() {
@@ -40,8 +37,6 @@ public class Part
             "id=" + id +
             ", title='" + title + '\'' +
             ", amount=" + amount +
-            ", category=" + category +
-            ", price=" + price +
             '}';
   }
 }

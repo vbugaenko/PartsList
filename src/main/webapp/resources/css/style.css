@@ -27,24 +27,16 @@ body {
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~ PARTS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-.usersBlocks {
+.mainBlocks {
     color:              black;
-    margin:             auto;
+    margin:             20px auto;
     border:             1px solid black;
-    width:              1070px;
+    width:              470px;
     padding:            20px;
     background-color:   white;
     text-align:         center;
     font-size:          12px;
     font-family:        сourier;
-}
-
-.userCard {
-    margin:             20px;
-    border:             1px solid black;
-    width:              940px;
-    padding:            20px;
-    background-color:   white;
 }
 
 .tableHeader {

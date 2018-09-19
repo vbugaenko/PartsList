@@ -23,7 +23,7 @@ public class PartsDAOImpl implements PartsDAO
     final Logger loggerConsoleInf = Logger.getLogger("consoleinf");
 
     @Override
-    public List<Part> deletePart(int id)
+    public void deletePart(int id)
     {
         try (Session session = cfg.buildSessionFactory().openSession())
         {
@@ -35,11 +35,10 @@ public class PartsDAOImpl implements PartsDAO
         }
         catch(Exception e)
         { loggerFileInf.error(e.getMessage()); }
-        return getAllParts();
     }
 
     @Override
-    public List<Part> addPart(Part part)
+    public void addPart(Part part)
     {
         try (Session session = cfg.buildSessionFactory().openSession())
         {
@@ -50,11 +49,10 @@ public class PartsDAOImpl implements PartsDAO
         }
         catch(Exception e)
         { loggerFileInf.error(e.getMessage()); }
-        return getAllParts();
     }
 
     @Override
-    public List<Part> updatePart(Part newPart)
+    public void updatePart(Part newPart)
     {
         try (Session session = cfg.buildSessionFactory().openSession())
         {
@@ -65,7 +63,6 @@ public class PartsDAOImpl implements PartsDAO
         }
         catch(Exception e)
         { loggerFileInf.error(e.getMessage()); }
-        return getAllParts();
     }
 
 
@@ -97,5 +94,21 @@ public class PartsDAOImpl implements PartsDAO
         catch (Exception e)
         { loggerFileInf.error(e.getMessage()); }
         return parts;
+    }
+
+    @Override
+    public void changeEnabledStatus(int id)
+    {
+        try (Session session = cfg.buildSessionFactory().openSession())
+        {
+            session.beginTransaction();
+            Part part = session.get(Part.class, id);
+            part.setEnabled(!part.isEnabled());
+            session.update(part);
+            session.getTransaction().commit();
+            session.close();
+        }
+        catch(Exception e)
+        { loggerFileInf.error(e.getMessage()); }
     }
 }

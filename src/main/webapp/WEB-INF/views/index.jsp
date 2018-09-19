@@ -9,8 +9,9 @@
 <%@ include file="header.jsp" %>
 
 <form action="${pageContext.request.contextPath}/" method="get">
-    <input type="hidden" id="page"     name="page" value="${page}" />
-    <input type="hidden" id="deleteID" name="deleteID"/>
+    <input type="hidden" id="page"       name="page" value="${page}" />
+    <input type="hidden" id="deleteID"   name="deleteID"/>
+    <input type="hidden" id="activateID" name="activateID"/>
 
     <div class="usersBlocks">
         <table>
@@ -22,7 +23,7 @@
             </tr>
 
             <c:forEach var="part" items="${parts}" varStatus="loopStatus" begin="${beginInt}" end="${endInt}">
-                <tr style="<c:if test="${!part.isSelected()}">color: silver;</c:if>
+                <tr style="<c:if test="${!part.isEnabled()}">color: silver;</c:if>
                         background-color: ${loopStatus.index % 2 == 0 ? '#F7F8E0;/>' : '#D8D8D8;/>'}">
                     <td align="left" class="whiteBG">
                         <button onclick="document.getElementById('deleteID').value = '${part.getId()}';"
@@ -32,15 +33,11 @@
                     </td>
                     <td align="left">${part.getTitle()} </td>
                     <td align="center">
-                        <button type="submit"
-                                style="border: 0; ${loopStatus.index % 2 == 0 ? 'background-color: #F7F8E0;/>' : 'background-color: #D8D8D8;/>'}"
-                                onclick="document.getElementById('activateID').value = '${part.getId()}';">
-                            <c:if test="${part.isSelected()}"> <img
-                                    src="https://d30y9cdsu7xlg0.cloudfront.net/png/9014-200.png" width="12"
-                                    height="12"> </c:if>
-                            <c:if test="${!part.isSelected()}"> <img
-                                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT9FHwUL0aVSEqDHB62nAniEUPx08jAQ6iEc7r8wjrThYz7Ufhf"
-                                    width="11" height="11"> </c:if>
+                        <button type="submit" style="border: 0; ${loopStatus.index % 2 == 0 ? 'background-color: #F7F8E0;/>' : 'background-color: #D8D8D8;/>'}" onclick="document.getElementById('activateID').value = '${part.getId()}';">
+                            <c:if test="${part.isEnabled()}">
+                                <img src="https://d30y9cdsu7xlg0.cloudfront.net/png/9014-200.png" width="12" height="12"> </c:if>
+                            <c:if test="${!part.isEnabled()}">
+                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT9FHwUL0aVSEqDHB62nAniEUPx08jAQ6iEc7r8wjrThYz7Ufhf" width="11" height="11"> </c:if>
                         </button>
 
                     </td>

@@ -28,12 +28,10 @@ public class PartsController
             //@RequestParam(value = "sortBy",      required = false) String sortBy,
             //@RequestParam(value = "filter",      required = false) String filter,
             @RequestParam(value = "page",        required = false) String page,
-            //@RequestParam(value = "idForUpdate", required = false) String idForUpdate,
-            @RequestParam(value = "deleteID", required = false) String deleteID,
+            @RequestParam(value = "deleteID",    required = false) String deleteID,
             @RequestParam(value = "activateID",  required = false) String activateID,
-            //@RequestParam(value = "editID",      required = false) String editID,
+            //@RequestParam(value = "idForUpdate", required = false) String idForUpdate,
             //@RequestParam(value = "editTitle",   required = false) String editTitle,
-            //@RequestParam(value = "editPrice",   required = false) String editPrice,
             //@RequestParam(value = "editAmount",  required = false) String editAmount,
             Model model )
     {
@@ -53,17 +51,20 @@ public class PartsController
         if (editID != null)
             idEdttUser = intFromString.recognize(idForUpdate);
 
-        if (activateID != null)
-            usersListService.changeEnableStatus(activateID);
-
         if (idForUpdate != null)
             usersListService.update(editID, editInfo, editRole);
 */
 
+        if ((activateID != null)&&(!activateID.equals("")))
+        {
+            int id = new IntFromStringImpl().recognize(activateID);
+            partsService.changeEnabledStatus(id);
+        }
+
         if ((deleteID != null)&&(!deleteID.equals("")))
         {
-            int deleteIDint = new IntFromStringImpl().recognize(deleteID);
-            partsService.delete(deleteIDint);
+            int id = new IntFromStringImpl().recognize(deleteID);
+            partsService.delete(id);
         }
 
 

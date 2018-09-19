@@ -7,6 +7,6 @@ import java.util.List;
 public interface PartsService
 {
     List<Part> getAllParts();
-
-    void delete(int deleteID);
+    void delete(int id);
+    void changeEnabledStatus(int id);
 }

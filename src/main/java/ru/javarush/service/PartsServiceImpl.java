@@ -23,8 +23,13 @@ public class PartsServiceImpl implements PartsService
     }
 
     @Override
-    public void delete(int deleteID)
+    public void delete(int id)
     {
-        partsDAOimpl.deletePart(deleteID);
+        partsDAOimpl.deletePart( id );
+    }
+
+    @Override
+    public void changeEnabledStatus(int id) {
+        partsDAOimpl.changeEnabledStatus(id);
     }
 }

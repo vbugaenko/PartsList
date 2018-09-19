@@ -21,6 +21,7 @@ public class Part
   private boolean selected;
   private int amount;
 
+
   public int getId()                         { return id;                }
   public String getTitle()                   { return title;             }
   public boolean isSelected()                { return selected;          }

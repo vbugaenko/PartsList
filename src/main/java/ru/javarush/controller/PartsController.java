@@ -152,11 +152,9 @@ public class PartsController
          */
         int min = 0;
         for(Part p : parts)
-            if (p.isEnabled())
-            {
-                if ((min == 0)||(p.getAmount() < min))
+            if (p.isEnabled() &&( (min == 0)||(p.getAmount() < min)) )
                     min = p.getAmount();
-            }
+
 
         model.addAttribute("parts",       parts     );
         model.addAttribute("beginInt",    begin     );

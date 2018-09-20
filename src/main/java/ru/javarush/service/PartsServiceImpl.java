@@ -29,7 +29,14 @@ public class PartsServiceImpl implements PartsService
     }
 
     @Override
-    public void changeEnabledStatus(int id) {
+    public void changeEnabledStatus(int id)
+    {
         partsDAOimpl.changeEnabledStatus(id);
+    }
+
+    @Override
+    public void update(Part part)
+    {
+        partsDAOimpl.updatePart( part );
     }
 }

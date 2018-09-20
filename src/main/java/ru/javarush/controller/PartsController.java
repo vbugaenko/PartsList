@@ -26,35 +26,52 @@ public class PartsController
 
     @RequestMapping(value="/", method = RequestMethod.GET)
     public String partsListWithFilters(
-            //@RequestParam(value = "sortBy",      required = false) String sortBy,
             //@RequestParam(value = "filter",      required = false) String filter,
-            @RequestParam(value = "page",        required = false) String page,
-            @RequestParam(value = "deleteID",    required = false) String deleteID,
-            @RequestParam(value = "activateID",  required = false) String activateID,
-            //@RequestParam(value = "idForUpdate", required = false) String idForUpdate,
-            //@RequestParam(value = "editTitle",   required = false) String editTitle,
-            //@RequestParam(value = "editAmount",  required = false) String editAmount,
+            @RequestParam(value = "page",         required = false) String page,
+            @RequestParam(value = "deleteID",     required = false) String deleteID,
+            @RequestParam(value = "activateID",   required = false) String activateID,
+            @RequestParam(value = "editID",       required = false) String editID,
+            @RequestParam(value = "updateID",     required = false) String updateID,
+            @RequestParam(value = "updateTitle",  required = false) String updateTitle,
+            @RequestParam(value = "updateAmount", required = false) String updateAmount,
+            @RequestParam(value = "saveEnabledStatusForUpdate", required = false) boolean saveEnabledStatusForUpdate,
             Model model )
     {
 
-
 /*
-        if (sortBy != null)
-            usersListSortedFiltered.setSortBy(sortByFromString.recognize(sortBy));
-
         if (filter != null)
             usersListSortedFiltered.setFilter(filterFromString.recognize(filter.trim()));
-
-        if (role != null)
-            usersListSortedFiltered.setRole(roleFromString.recognize(role));
-
-        int idEdttUser = 0;
-        if (editID != null)
-            idEdttUser = intFromString.recognize(idForUpdate);
-
-        if (idForUpdate != null)
-            usersListService.update(editID, editInfo, editRole);
 */
+
+        int updateAmountInt=0;
+        if ((updateAmount != null)&&(!updateAmount.equals("")))
+        {
+            updateAmountInt = new IntFromStringImpl().recognize(updateAmount);
+        }
+
+        String updateTitleStr="";
+        if ((updateTitle != null)&&(!updateTitle.equals("")))
+        {
+            updateTitleStr=updateTitle;
+        }
+
+        int updateIDInt = 0;
+        if ((updateID != null)&&(!updateID.equals("")))
+        {
+            updateIDInt = new IntFromStringImpl().recognize(updateID);
+            Part part = new Part();
+            part.setId      ( updateIDInt     );
+            part.setTitle   ( updateTitle     );
+            part.setEnabled ( saveEnabledStatusForUpdate );
+            part.setAmount  ( updateAmountInt );
+            partsService.update(part);
+        }
+
+        String editIDInt = null;
+        if ((editID != null)&&(!editID.equals("")))
+        {
+            editIDInt = editID;
+        }
 
         if ((activateID != null)&&(!activateID.equals("")))
         {
@@ -85,12 +102,12 @@ public class PartsController
                     min = p.getAmount();
             }
 
-
         model.addAttribute("parts",     partsService.getAllParts() );
-        model.addAttribute("beginInt",  begin   );
-        model.addAttribute("endInt",    end     );
-        model.addAttribute("page",      pageInt );
-        model.addAttribute("sborka",    min     );
+        model.addAttribute("beginInt",  begin     );
+        model.addAttribute("endInt",    end       );
+        model.addAttribute("page",      pageInt   );
+        model.addAttribute("sborka",    min       );
+        model.addAttribute("editIDInt", editIDInt );
 
         return "index";
     }

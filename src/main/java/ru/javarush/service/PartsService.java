@@ -9,4 +9,5 @@ public interface PartsService
     List<Part> getAllParts();
     void delete(int id);
     void changeEnabledStatus(int id);
+    void update(Part part);
 }

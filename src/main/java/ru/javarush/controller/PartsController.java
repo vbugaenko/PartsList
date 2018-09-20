@@ -10,8 +10,6 @@ import ru.javarush.db.entity.Part;
 import ru.javarush.service.PartsService;
 import ru.javarush.service.PartsServiceImpl;
 import ru.javarush.service.utility.IntFromStringImpl;
-import ru.javarush.service.utility.PageFromString;
-import ru.javarush.service.utility.PageFromStringImpl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,12 +25,10 @@ import java.util.regex.Pattern;
 public class PartsController
 {
     private PartsService partsService = new PartsServiceImpl();
-
-    private PageFromString pageFromString = new PageFromStringImpl();
+    private IntFromStringImpl intFromString = new IntFromStringImpl();
 
     @RequestMapping(value="/", method = RequestMethod.GET)
     public String partsListWithFilters(
-            //@RequestParam(value = "filter",      required = false) String filter,
             @RequestParam(value = "page",         required = false) String page,
             @RequestParam(value = "deleteID",     required = false) String deleteID,
             @RequestParam(value = "activateID",   required = false) String activateID,
@@ -40,7 +36,7 @@ public class PartsController
             @RequestParam(value = "updateID",     required = false) String updateID,
             @RequestParam(value = "updateTitle",  required = false) String updateTitle,
             @RequestParam(value = "updateAmount", required = false) String updateAmount,
-            @RequestParam(value = "saveEnabledStatusForUpdate", required = false) boolean saveEnabledStatusForUpdate,
+            @RequestParam(value = "saveEnabled",  required = false) boolean saveEnabled,
             @RequestParam(value = "searchTitle",  required = false) String searchTitle,
             @RequestParam(value = "filterField",  required = false) String filter,
             @RequestParam(value = "addNewPart",   required = false) String addNewPart,
@@ -62,14 +58,12 @@ public class PartsController
             updateTitleStr=updateTitle;
         }
 
-        int updateIDInt = 0;
         if ((updateID != null)&&(!updateID.equals("")))
         {
-            updateIDInt = new IntFromStringImpl().recognize(updateID);
             Part part = new Part();
-            part.setId      ( updateIDInt     );
+            part.setId      ( intFromString.recognize( updateID ) );
             part.setTitle   ( updateTitle     );
-            part.setEnabled ( saveEnabledStatusForUpdate );
+            part.setEnabled ( saveEnabled     );
             part.setAmount  ( updateAmountInt );
             partsService.update(part);
         }
@@ -82,7 +76,7 @@ public class PartsController
 
         if ((activateID != null)&&(!activateID.equals("")))
         {
-            int id = new IntFromStringImpl().recognize(activateID);
+            int id = intFromString.recognize(activateID);
             partsService.changeEnabledStatus(id);
         }
 
@@ -96,7 +90,7 @@ public class PartsController
         int limit = 10;
         int pageInt = 1;
         if ((page != null)&&(!page.equals("")))
-            pageInt = pageFromString.recognize( page );
+            pageInt = intFromString.recognize( page );
         int begin = (pageInt-1)*limit;
         int end =   begin+limit-1;
 

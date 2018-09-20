@@ -118,7 +118,7 @@
                         </button>
                         </c:if>
                         <c:if test="${part.getId() eq editIDInt}">
-                            <input type="hidden" id="saveEnabledStatusForUpdate"   name="saveEnabledStatusForUpdate" value="${part.isEnabled()}" />
+                            <input type="hidden" id="saveEnabled"   name="saveEnabled" value="${part.isEnabled()}" />
                         </c:if>
                     </td>
                     <!--Amount-->

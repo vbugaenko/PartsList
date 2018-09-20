@@ -16,9 +16,16 @@
     <input type="hidden" id="editID"     name="editID"               />
     <input type="hidden" id="updateID"   name="updateID"             />
 
-
-    <!--Parts table-->
     <div class="mainBlocks">
+        <!--Search-->
+        <div align="right">
+            <input type="text" id="searchTitle"   name="searchTitle"  placeholder="search by title"/>
+            <button>
+                <img src="http://cropas.by/wp-content/uploads/2015/07/search.png" width="10" height="10">
+            </button>
+        </div>
+        <br/>
+        <!--Parts table-->
         <table>
             <tr class="tableHeader">
                 <td width="30  ">del         </td>
@@ -29,6 +36,8 @@
             </tr>
 
             <c:forEach var="part" items="${parts}" varStatus="loopStatus" begin="${beginInt}" end="${endInt}">
+
+
                 <tr style="<c:if test="${!part.isEnabled()}">color: silver;</c:if>
                         background-color: ${loopStatus.index % 2 == 0 ? '#F7F8E0;/>' : '#D8D8D8;/>'}">
                     <!--Delete button-->

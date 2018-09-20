@@ -13,6 +13,11 @@ import ru.javarush.service.utility.IntFromStringImpl;
 import ru.javarush.service.utility.PageFromString;
 import ru.javarush.service.utility.PageFromStringImpl;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * @author Victor Bugaenko
  * @since 18.09.2018
@@ -22,6 +27,7 @@ import ru.javarush.service.utility.PageFromStringImpl;
 public class PartsController
 {
     private PartsService partsService = new PartsServiceImpl();
+
     private PageFromString pageFromString = new PageFromStringImpl();
 
     @RequestMapping(value="/", method = RequestMethod.GET)
@@ -35,6 +41,7 @@ public class PartsController
             @RequestParam(value = "updateTitle",  required = false) String updateTitle,
             @RequestParam(value = "updateAmount", required = false) String updateAmount,
             @RequestParam(value = "saveEnabledStatusForUpdate", required = false) boolean saveEnabledStatusForUpdate,
+            @RequestParam(value = "searchTitle", required = false) String searchTitle,
             Model model )
     {
 
@@ -94,6 +101,21 @@ public class PartsController
         int end =   begin+limit-1;
 
 
+        List<Part> parts =  partsService.getAllParts();
+        if ((searchTitle != null)&&(!searchTitle.equals("")))
+        {
+            parts = new ArrayList();
+            Pattern pt = Pattern.compile( searchTitle, Pattern.CASE_INSENSITIVE );
+            Matcher mt;
+
+            for(Part p : partsService.getAllParts())
+            {
+                mt = pt.matcher(p.getTitle());
+                if (mt.find())
+                parts.add(p);
+            }
+        }
+
         int min = 0;
         for(Part p : partsService.getAllParts())
             if (p.isEnabled())
@@ -102,12 +124,13 @@ public class PartsController
                     min = p.getAmount();
             }
 
-        model.addAttribute("parts",     partsService.getAllParts() );
-        model.addAttribute("beginInt",  begin     );
-        model.addAttribute("endInt",    end       );
-        model.addAttribute("page",      pageInt   );
-        model.addAttribute("sborka",    min       );
-        model.addAttribute("editIDInt", editIDInt );
+
+        model.addAttribute("parts",       parts     );
+        model.addAttribute("beginInt",    begin     );
+        model.addAttribute("endInt",      end       );
+        model.addAttribute("page",        pageInt   );
+        model.addAttribute("sborka",      min       );
+        model.addAttribute("editIDInt",   editIDInt );
 
         return "index";
     }

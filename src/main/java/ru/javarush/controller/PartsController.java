@@ -52,12 +52,6 @@ public class PartsController
             updateAmountInt = new IntFromStringImpl().recognize(updateAmount);
         }
 
-        String updateTitleStr="";
-        if ((updateTitle != null)&&(!updateTitle.equals("")))
-        {
-            updateTitleStr=updateTitle;
-        }
-
         if ((updateID != null)&&(!updateID.equals("")))
         {
             Part part = new Part();
@@ -152,7 +146,10 @@ public class PartsController
             }
 
 
-        // Подсчет числа компьютеров, которые можно собрать из имеющихся запчастей
+        /**
+         * Подсчет числа компьютеров, которые можно собрать из имеющихся запчастей.
+         * Осуществляется через поиск наименьшего числа деталей в перечне.
+         */
         int min = 0;
         for(Part p : parts)
             if (p.isEnabled())

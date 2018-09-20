@@ -41,7 +41,8 @@ public class PartsController
             @RequestParam(value = "updateTitle",  required = false) String updateTitle,
             @RequestParam(value = "updateAmount", required = false) String updateAmount,
             @RequestParam(value = "saveEnabledStatusForUpdate", required = false) boolean saveEnabledStatusForUpdate,
-            @RequestParam(value = "searchTitle", required = false) String searchTitle,
+            @RequestParam(value = "searchTitle",  required = false) String searchTitle,
+            @RequestParam(value = "filterField",  required = false) String filter,
             Model model )
     {
 
@@ -116,14 +117,36 @@ public class PartsController
             }
         }
 
-        int min = 0;
-        for(Part p : partsService.getAllParts())
+            List<Part> partsTmp = new ArrayList();
+            if ((filter==null)||(filter.equals("DISABLED")))
+                filter = "NONE";
+            else if (filter.equals("NONE"))
+            {
+                filter = "ACTIVE";
+                for(Part p : parts)
+                    if (p.isEnabled())
+                        partsTmp.add(p);
+                parts = partsTmp;
+            }
+            else if (filter.equals("ACTIVE"))
+            {
+                filter = "DISABLED";
+                for (Part p : parts)
+                    if (!p.isEnabled())
+                        partsTmp.add(p);
+                parts = partsTmp;
+            }
+            else
+                filter = "NONE";
+
+
+            int min = 0;
+        for(Part p : parts)
             if (p.isEnabled())
             {
                 if ((min == 0)||(p.getAmount() < min))
                     min = p.getAmount();
             }
-
 
         model.addAttribute("parts",       parts     );
         model.addAttribute("beginInt",    begin     );
@@ -131,6 +154,7 @@ public class PartsController
         model.addAttribute("page",        pageInt   );
         model.addAttribute("sborka",      min       );
         model.addAttribute("editIDInt",   editIDInt );
+        model.addAttribute("filter",      filter    );
 
         return "index";
     }

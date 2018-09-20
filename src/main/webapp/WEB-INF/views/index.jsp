@@ -10,11 +10,12 @@
 
 <form action="${pageContext.request.contextPath}/" method="get">
     <!--Hidden fields-->
-    <input type="hidden" id="page"       name="page" value="${page}" />
-    <input type="hidden" id="deleteID"   name="deleteID"             />
-    <input type="hidden" id="activateID" name="activateID"           />
-    <input type="hidden" id="editID"     name="editID"               />
-    <input type="hidden" id="updateID"   name="updateID"             />
+    <input type="hidden" id="page"        name="page" value="${page}" />
+    <input type="hidden" id="deleteID"    name="deleteID"             />
+    <input type="hidden" id="activateID"  name="activateID"           />
+    <input type="hidden" id="editID"      name="editID"               />
+    <input type="hidden" id="updateID"    name="updateID"             />
+    <input type="hidden" id="filterField" name="filterField"          />
 
     <div class="mainBlocks">
         <!--Search-->
@@ -30,7 +31,22 @@
             <tr class="tableHeader">
                 <td width="30  ">del         </td>
                 <td width="300 ">Наименование</td>
-                <td>Необходимость            </td>
+                <!--Filter-->
+                <td>
+                    <button type="submit" style="border: 0; ${loopStatus.index % 2 == 0 ? 'background-color: #F7F8E0;/>' : 'background-color: #D8D8D8;/>'}" onclick="document.getElementById('filterField').value = '${filter}';">
+                        <c:choose>
+                            <c:when test="${requestScope.filter eq 'NONE'}">
+                            *
+                            </c:when>
+                            <c:when test="${requestScope.filter eq 'ACTIVE'}">
+                                <img src="https://d30y9cdsu7xlg0.cloudfront.net/png/9014-200.png" width="12" height="12">
+                            </c:when>
+                            <c:when test="${requestScope.filter eq 'DISABLED'}">
+                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT9FHwUL0aVSEqDHB62nAniEUPx08jAQ6iEc7r8wjrThYz7Ufhf" width="11" height="11">
+                            </c:when>
+                        </c:choose>
+                    </button>
+                </td>
                 <td>Количество               </td>
                 <td>edt                      </td>
             </tr>

@@ -10,4 +10,5 @@ public interface PartsService
     void delete(int id);
     void changeEnabledStatus(int id);
     void update(Part part);
+    void add(Part part);
 }

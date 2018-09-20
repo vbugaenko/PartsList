@@ -39,4 +39,10 @@ public class PartsServiceImpl implements PartsService
     {
         partsDAOimpl.updatePart( part );
     }
+
+    @Override
+    public void add(Part part)
+    {
+        partsDAOimpl.addPart( part );
+    }
 }

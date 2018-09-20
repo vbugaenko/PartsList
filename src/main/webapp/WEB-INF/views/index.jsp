@@ -16,18 +16,53 @@
     <input type="hidden" id="editID"      name="editID"               />
     <input type="hidden" id="updateID"    name="updateID"             />
     <input type="hidden" id="filterField" name="filterField"          />
+    <input type="hidden" id="addNewPart"  name="addNewPart"           />
 
     <div class="mainBlocks">
-        <!--Search-->
-        <div align="right">
-            <input type="text" id="searchTitle"   name="searchTitle"  placeholder="search by title"/>
-            <button>
-                <img src="http://cropas.by/wp-content/uploads/2015/07/search.png" width="10" height="10">
+
+        <div>
+            <!--AddNewPart-->
+            <div style="float:left;">
+                    <!--button: add-->
+                    <c:if test="${empty addNewPart}">
+                        <button onclick="document.getElementById('addNewPart').value = '1';">
+                            <img src=
+                         "https://ru.seaicons.com/wp-content/uploads/2017/02/Button-Add-icon.png"
+                                 width="10" height="10" />
+                        </button>
+                    </c:if>
+                    <!--button: cancel-->
+                    <c:if test="${not empty addNewPart}">
+                        <button onclick="document.getElementById('addNewPart').value = '';">
+                            <img src=
+                        "https://icon-icons.com/icons2/1150/PNG/512/1486504817-delete-minus-cancel-exit-remove_81373.png"
+                                 width="10" height="10" />
+                        </button>
+                    </c:if>
+            </div>
+            <!--Search-->
+            <div style="float:right;" align="right">
+                <input type="text" id="searchTitle"   name="searchTitle"  placeholder="search by title"/>
+                <button>
+                    <img src="http://cropas.by/wp-content/uploads/2015/07/search.png" width="10" height="10">
+                </button>
+            </div>
+        </div>
+
+        <!--form for add new part-->
+        <c:if test="${not empty addNewPart}">
+        <div style="clear: both; margin: 40px 0 0 0; ">
+            name <input type="text" id="addTitle" name="addTitle" />
+            enabled <input type="checkbox" id="addEnabled" name="addEnabled" />
+            amount <input type="text" id="addAmount"   name="addAmount"  style="width: 40px;"/>
+            <button onclick="document.getElementById('').value = ''; " style="padding: 0px; margin: 0 0 0 20px;">
+                <img src="http://image.flaticon.com/icons/png/512/257/257831.png" width="15">
             </button>
         </div>
-        <br/>
+        </c:if>
+
         <!--Parts table-->
-        <table>
+        <table style="clear: both; margin: 40px 0 0 0;">
             <tr class="tableHeader">
                 <td width="30  ">del         </td>
                 <td width="300 ">Наименование</td>

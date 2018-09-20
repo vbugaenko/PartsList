@@ -43,13 +43,12 @@ public class PartsController
             @RequestParam(value = "saveEnabledStatusForUpdate", required = false) boolean saveEnabledStatusForUpdate,
             @RequestParam(value = "searchTitle",  required = false) String searchTitle,
             @RequestParam(value = "filterField",  required = false) String filter,
+            @RequestParam(value = "addNewPart",   required = false) String addNewPart,
+            @RequestParam(value = "addTitle",     required = false) String addTitle,
+            @RequestParam(value = "addEnabled",   required = false) String addEnabled,
+            @RequestParam(value = "addAmount",    required = false) String addAmount,
             Model model )
     {
-
-/*
-        if (filter != null)
-            usersListSortedFiltered.setFilter(filterFromString.recognize(filter.trim()));
-*/
 
         int updateAmountInt=0;
         if ((updateAmount != null)&&(!updateAmount.equals("")))
@@ -139,8 +138,28 @@ public class PartsController
             else
                 filter = "NONE";
 
+        //Добавление
+            Part part = new Part();
+            if ((addTitle != null)&&(!addTitle.equals("")))
+            {
+                part.setTitle(addTitle);
 
-            int min = 0;
+                if ((addEnabled != null)&&(!addEnabled.equals(""))&&(addEnabled.equals("on")))
+                    part.setEnabled(true);
+                else
+                    part.setEnabled(false);
+
+                if ((addAmount != null) && (!addAmount.equals("")))
+                    part.setAmount(new IntFromStringImpl().recognize(addAmount));
+                else
+                    part.setAmount(0);
+
+                partsService.add(part);
+            }
+
+
+        // Подсчет числа компьютеров, которые можно собрать из имеющихся запчастей
+        int min = 0;
         for(Part p : parts)
             if (p.isEnabled())
             {
@@ -155,7 +174,7 @@ public class PartsController
         model.addAttribute("sborka",      min       );
         model.addAttribute("editIDInt",   editIDInt );
         model.addAttribute("filter",      filter    );
-
+        model.addAttribute("addNewPart",  addNewPart);
         return "index";
     }
 

@@ -17,17 +17,36 @@ import java.util.List;
 public class PartsServiceImpl implements PartsService {
     private PartsDAOImpl partsDAOimpl = new PartsDAOImpl();
     private IntFromStringImpl intFromString = new IntFromStringImpl();
-
-    public List<Part> getAllParts() {
-        return partsDAOimpl.getAllParts();
-    }
+    enum Filter { NONE, DISABLED, ACTIVE }
 
     /**
-     * Поиск запчастей в базе осуществляется вне зависимости от регистра.
+     * @param filter принимается текущее значение
+     * @return выставляется следующее
      */
+    public Enum filerEnum(String filter)
+    {
+        if ((filter==null)||(filter.equals("DISABLED")))
+            return Filter.NONE;
+        if (filter.equals("NONE"))
+            return Filter.ACTIVE;
+        else if (filter.equals("ACTIVE"))
+            return Filter.DISABLED;
+
+        return Filter.NONE;
+    }
+
     @Override
-    public List<Part> searchParts(String pattern) {
-        return partsDAOimpl.searchParts(pattern);
+    public List<Part> getParts(String filter, String search )
+    {
+        if ((search != null)&&(!search.equals("")))
+            return partsDAOimpl.getParts("SELECT * FROM parts WHERE title REGEXP '"+search+"';");
+
+        if (filerEnum(filter) == Filter.ACTIVE)
+            return partsDAOimpl.getParts("SELECT * FROM parts WHERE enabled=1;");
+        if (filerEnum(filter) == Filter.DISABLED)
+            return partsDAOimpl.getParts("SELECT * FROM parts WHERE enabled=0;");
+
+        return partsDAOimpl.getParts("SELECT * FROM parts;");
     }
 
     @Override
@@ -36,29 +55,13 @@ public class PartsServiceImpl implements PartsService {
     }
 
     @Override
-    public void changeEnabledStatus(String id) {
-        partsDAOimpl.changeEnabledStatus(intFromString.recognize(id));
-    }
-
-    @Override
-    public void update(Part part) {
-        partsDAOimpl.updatePart(part);
-    }
-
-    @Override
     public void add(Part part) {
         partsDAOimpl.addPart(part);
     }
 
-    /**
-     * Добавление новой запчасти:
-     * - проверка заголовка;
-     * - проверка статуса/необходимости (иначе false);
-     * - проверка указанного числа деталей (иначе 0).
-     */
     @Override
-    public void add(String addTitle, String addEnabled, String addAmount) {
-
+    public void add(String addTitle, String addEnabled, String addAmount)
+    {
         Part part = new Part();
 
         part.setTitle(addTitle);
@@ -72,11 +75,19 @@ public class PartsServiceImpl implements PartsService {
         add(part);
     }
 
-    /**
-     * Изменение данных имеющейся в базе запчасти.
-     */
     @Override
-    public void update(String updateID, String updateTitle, boolean saveEnabled, String updateAmount) {
+    public void changeEnabledStatus(String id) {
+        partsDAOimpl.changeEnabledStatus(intFromString.recognize(id));
+    }
+
+    @Override
+    public void update(Part part) {
+        partsDAOimpl.updatePart(part);
+    }
+
+    @Override
+    public void update(String updateID, String updateTitle, boolean saveEnabled, String updateAmount)
+    {
         Part part = new Part();
         part.setId(intFromString.recognize(updateID));
         part.setTitle(updateTitle);

@@ -11,7 +11,6 @@ import ru.javarush.service.PartsService;
 import ru.javarush.service.PartsServiceImpl;
 import ru.javarush.service.utility.IntFromStringImpl;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,7 +23,6 @@ public class PartsController
 {
     private PartsService partsService = new PartsServiceImpl();
     private IntFromStringImpl intFromString = new IntFromStringImpl();
-    List<Part> parts =  partsService.getAllParts();
 
     @RequestMapping(value="/", method = RequestMethod.GET)
     public String partsListWithFilters(
@@ -56,10 +54,7 @@ public class PartsController
         if ((addTitle != null)&&(!addTitle.equals("")))
             partsService.add( addTitle, addEnabled, addAmount );
 
-        parts = partsService.getAllParts(); //Todo: с этим дублированием разобраться
-
-        if ((searchTitle != null)&&(!searchTitle.equals("")))
-            parts = partsService.searchParts(searchTitle);
+        List<Part> parts = partsService.getParts( filter, searchTitle );
 
         /**
          * begin и end позволяют варьировать количество отображаемых записей на странице.
@@ -71,32 +66,6 @@ public class PartsController
         //TODO: перенести begin и end в JSP
         int begin = (pageInt-1)*limit;
         int end = begin+limit-1;
-
-        /**
-         * Фильтрация по статусу включенности списка деталей и удаление из него не соответствующих.
-         */
-        //TODO: нужно оптимизировать на уровне запроса к базе чтобы не тянуть из нее всех а потом еще и отсекать.
-            List<Part> partsTmp = new ArrayList();
-            if ((filter==null)||(filter.equals("DISABLED")))
-                filter = "NONE";
-            else if (filter.equals("NONE"))
-            {
-                filter = "ACTIVE";
-                for(Part p : parts)
-                    if (p.isEnabled())
-                        partsTmp.add(p);
-                parts = partsTmp;
-            }
-            else if (filter.equals("ACTIVE"))
-            {
-                filter = "DISABLED";
-                for (Part p : parts)
-                    if (!p.isEnabled())
-                        partsTmp.add(p);
-                parts = partsTmp;
-            }
-            else
-                filter = "NONE";
 
         /**
          * Подсчет числа компьютеров, которые можно собрать из имеющихся запчастей.
@@ -115,7 +84,7 @@ public class PartsController
         model.addAttribute("sborka",      min       );
         model.addAttribute("editIDInt",   editID    );  //TODO: по хорошему это все в JSP может через JS
                                                           // и вообще можно уронить приложение, если там не число будет
-        model.addAttribute("filter",      filter    );
+        model.addAttribute("filter",      partsService.filerEnum(filter) );
         model.addAttribute("addNewPart",  addNewPart);
         model.addAttribute("searchTitle", searchTitle);
         return "index";

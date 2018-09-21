@@ -14,8 +14,6 @@ public interface PartsDAO
     void deletePart(int id );
     void addPart(Part part );
     void updatePart(Part part );
-    Part getPart( int id );
-    List<Part> getAllParts();
+    List<Part> getParts(String sql);
     void changeEnabledStatus(int id);
-    List<Part> searchParts(String pattern);
 }

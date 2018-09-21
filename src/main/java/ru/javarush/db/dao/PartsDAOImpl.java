@@ -65,28 +65,13 @@ public class PartsDAOImpl implements PartsDAO
         { loggerFileInf.error(e.getMessage()); }
     }
 
-
     @Override
-    public Part getPart(int id)
-    {
-        Part part = null;
-        try (Session session = cfg.buildSessionFactory().openSession())
-        {
-            part = session.get(Part.class, id);
-            session.getTransaction().commit();
-        }
-        catch (Exception e)
-        { loggerConsoleInf.error( e.getMessage() ); }
-        return part;
-    }
-
-    @Override
-    public List<Part> getAllParts()
+    public List<Part> getParts(String sql)
     {
         List<Part> parts = new ArrayList();
         try ( Session session = cfg.buildSessionFactory().openSession() )
         {
-            NativeQuery query = session.createNativeQuery("SELECT * FROM parts;");
+            NativeQuery query = session.createNativeQuery( sql );
             query.addEntity(Part.class);
             parts = query.list();
             session.close();
@@ -112,20 +97,4 @@ public class PartsDAOImpl implements PartsDAO
         { loggerFileInf.error(e.getMessage()); }
     }
 
-    //Todo: код повторяется с getAllParts только запросы разные
-    @Override
-    public List<Part> searchParts(String pattern)
-    {
-        List<Part> parts = new ArrayList();
-        try ( Session session = cfg.buildSessionFactory().openSession() )
-        {
-            NativeQuery query = session.createNativeQuery("SELECT * FROM parts WHERE title REGEXP '"+pattern+"';");
-            query.addEntity(Part.class);
-            parts = query.list();
-            session.close();
-        }
-        catch (Exception e)
-        { loggerFileInf.error(e.getMessage()); }
-        return parts;
-    }
 }

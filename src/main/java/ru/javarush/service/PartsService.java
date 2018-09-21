@@ -14,6 +14,5 @@ public interface PartsService
     void add(String addTitle, String addEnabled, String addAmount);
     Enum filerEnum(String filter);
     void update(String updateID, String updateTitle, boolean saveEnabled, String updateAmount);
-
-
+    int min();
 }

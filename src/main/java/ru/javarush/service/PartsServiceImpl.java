@@ -14,7 +14,8 @@ import java.util.List;
  * @since 18.09.2018
  */
 @Service
-public class PartsServiceImpl implements PartsService {
+public class PartsServiceImpl implements PartsService
+{
     private PartsDAOImpl partsDAOimpl = new PartsDAOImpl();
     private IntFromStringImpl intFromString = new IntFromStringImpl();
     private enum Filter { NONE, DISABLED, ACTIVE }
@@ -98,6 +99,20 @@ public class PartsServiceImpl implements PartsService {
         part.setEnabled(saveEnabled);
         part.setAmount(intFromString.recognize(updateAmount));
         update(part);
+    }
+
+    /**
+     * Подсчет числа компьютеров, которые можно собрать из имеющихся запчастей.
+     * Осуществляется через поиск наименьшего числа деталей в перечне.
+     */
+    @Override
+    public int min()
+    {
+        int min = 0;
+        for(Part p : parts)
+            if (p.isEnabled() &&( (min == 0)||(p.getAmount() < min)) )
+                min = p.getAmount();
+        return min;
     }
 
 }

@@ -67,21 +67,12 @@ public class PartsController
         int begin = (pageInt-1)*limit;
         int end = begin+limit-1;
 
-        /**
-         * Подсчет числа компьютеров, которые можно собрать из имеющихся запчастей.
-         * Осуществляется через поиск наименьшего числа деталей в перечне.
-         */
-        int min = 0;
-        for(Part p : parts)
-            if (p.isEnabled() &&( (min == 0)||(p.getAmount() < min)) )
-                    min = p.getAmount();
-
 
         model.addAttribute("parts",       parts     );
         model.addAttribute("beginInt",    begin     );
         model.addAttribute("endInt",      end       );
         model.addAttribute("page",        pageInt   );
-        model.addAttribute("sborka",      min       );
+        model.addAttribute("sborka",      partsService.min() );
         model.addAttribute("editIDInt",   editID    );  //TODO: по хорошему это все в JSP может через JS
                                                           // и вообще можно уронить приложение, если там не число будет
         model.addAttribute("filter",      partsService.filerEnum(filter) );

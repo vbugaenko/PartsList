@@ -46,6 +46,16 @@ public class PartsController
             Model model )
     {
 
+        if ((activateID != null)&&(!activateID.equals("")))
+            partsService.changeEnabledStatus( intFromString.recognize(activateID) );
+
+        if ((deleteID != null)&&(!deleteID.equals("")))
+            partsService.delete( intFromString.recognize(deleteID) );
+
+        /**
+         *
+         */
+
         int updateAmountInt=0;
         if ((updateAmount != null)&&(!updateAmount.equals("")))
         {
@@ -68,27 +78,23 @@ public class PartsController
             editIDInt = editID;
         }
 
-        if ((activateID != null)&&(!activateID.equals("")))
-        {
-            int id = intFromString.recognize(activateID);
-            partsService.changeEnabledStatus(id);
-        }
 
-        if ((deleteID != null)&&(!deleteID.equals("")))
-        {
-            int id = new IntFromStringImpl().recognize(deleteID);
-            partsService.delete(id);
-        }
-
-
+        /**
+         * begin и end позволяют варьировать количество отображаемых записей на странице.
+         */
         int limit = 10;
         int pageInt = 1;
         if ((page != null)&&(!page.equals("")))
             pageInt = intFromString.recognize( page );
+        //TODO: перенести begin и end в JSP
         int begin = (pageInt-1)*limit;
-        int end =   begin+limit-1;
+        int end = begin+limit-1;
 
-
+        /**
+         * Фильтрация списка деталей по запрашиваемому имени.
+         * Поиск подстроки вне зависимости от регистра.
+         */
+        //TODO: нужно оптимизировать на уровне запроса к базе чтобы не тянуть из нее всех а потом еще и отсекать.
         List<Part> parts =  partsService.getAllParts();
         if ((searchTitle != null)&&(!searchTitle.equals("")))
         {
@@ -104,6 +110,10 @@ public class PartsController
             }
         }
 
+        /**
+         * Фильтрация списка деталей и удаление из него не соответствующих.
+         */
+        //TODO: нужно оптимизировать на уровне запроса к базе чтобы не тянуть из нее всех а потом еще и отсекать.
             List<Part> partsTmp = new ArrayList();
             if ((filter==null)||(filter.equals("DISABLED")))
                 filter = "NONE";
@@ -126,25 +136,25 @@ public class PartsController
             else
                 filter = "NONE";
 
-        //Добавление
-            Part part = new Part();
-            if ((addTitle != null)&&(!addTitle.equals("")))
-            {
-                part.setTitle(addTitle);
+        /**
+         * Добавление новой запчасти:
+         * - проверка заголовка;
+         * - статуса (необходимости);
+         * - указанного числа деталей.
+         */
+        Part part = new Part();
+        if ((addTitle != null)&&(!addTitle.equals("")))
+        {
+            part.setTitle(addTitle);
 
-                if ((addEnabled != null)&&(!addEnabled.equals(""))&&(addEnabled.equals("on")))
-                    part.setEnabled(true);
-                else
-                    part.setEnabled(false);
+            if ((addEnabled != null)&&(addEnabled.equals("on")))
+                part.setEnabled(true);
 
-                if ((addAmount != null) && (!addAmount.equals("")))
-                    part.setAmount(new IntFromStringImpl().recognize(addAmount));
-                else
-                    part.setAmount(0);
+            if ((addAmount != null) && (!addAmount.equals("")))
+                part.setAmount(new IntFromStringImpl().recognize(addAmount));
 
-                partsService.add(part);
-            }
-
+            partsService.add(part);
+        }
 
         /**
          * Подсчет числа компьютеров, которые можно собрать из имеющихся запчастей.

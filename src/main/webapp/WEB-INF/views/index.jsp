@@ -42,10 +42,18 @@
             </div>
             <!--Search-->
             <div style="float:right;" align="right">
-                <input type="text" id="searchTitle"   name="searchTitle"  placeholder="search by title"/>
+                <input type="text" id="searchTitle"   name="searchTitle"  placeholder="search by title" value="${searchTitle}"/>
+                <c:if test="${empty searchTitle}">
                 <button>
                     <img src="http://cropas.by/wp-content/uploads/2015/07/search.png" width="10" height="10">
                 </button>
+                </c:if>
+                <c:if test="${not empty searchTitle}">
+                <button onclick="document.getElementById('searchTitle').value = '';">
+                    <img src="https://icons8.com/iconizer/files/Juicy_Fruit/orig/cross.png" width="10" height="10">
+                </button>
+                </c:if>
+
             </div>
         </div>
 

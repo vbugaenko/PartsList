@@ -17,7 +17,8 @@ import java.util.List;
 public class PartsServiceImpl implements PartsService {
     private PartsDAOImpl partsDAOimpl = new PartsDAOImpl();
     private IntFromStringImpl intFromString = new IntFromStringImpl();
-    enum Filter { NONE, DISABLED, ACTIVE }
+    private enum Filter { NONE, DISABLED, ACTIVE }
+    private List<Part> parts;
 
     /**
      * @param filter принимается текущее значение
@@ -35,18 +36,21 @@ public class PartsServiceImpl implements PartsService {
         return Filter.NONE;
     }
 
+    /**
+     * В зависимости от фильтра или наличия задания на поиск используется разный sql запрос.
+     */
     @Override
     public List<Part> getParts(String filter, String search )
     {
         if ((search != null)&&(!search.equals("")))
-            return partsDAOimpl.getParts("SELECT * FROM parts WHERE title REGEXP '"+search+"';");
-
-        if (filerEnum(filter) == Filter.ACTIVE)
-            return partsDAOimpl.getParts("SELECT * FROM parts WHERE enabled=1;");
-        if (filerEnum(filter) == Filter.DISABLED)
-            return partsDAOimpl.getParts("SELECT * FROM parts WHERE enabled=0;");
-
-        return partsDAOimpl.getParts("SELECT * FROM parts;");
+            parts = partsDAOimpl.getParts("SELECT * FROM parts WHERE title REGEXP '"+search+"';");
+        else if (filerEnum(filter) == Filter.ACTIVE)
+            parts = partsDAOimpl.getParts("SELECT * FROM parts WHERE enabled=1;");
+        else if (filerEnum(filter) == Filter.DISABLED)
+            parts = partsDAOimpl.getParts("SELECT * FROM parts WHERE enabled=0;");
+        else
+            parts = partsDAOimpl.getParts("SELECT * FROM parts;");
+        return parts;
     }
 
     @Override

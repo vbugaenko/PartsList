@@ -44,15 +44,17 @@ public class PartsController
             @RequestParam(value = "addAmount",    required = false) String addAmount,
             Model model )
     {
-
         if ((activateID != null)&&(!activateID.equals("")))
             partsService.changeEnabledStatus( activateID );
+
+        if ((updateID != null)&&(!updateID.equals("")))
+            partsService.update(updateID, updateTitle,saveEnabled, updateAmount);
 
         if ((deleteID != null)&&(!deleteID.equals("")))
             partsService.delete( deleteID );
 
-        if ((updateID != null)&&(!updateID.equals("")))
-            partsService.update(updateID, updateTitle,saveEnabled, updateAmount);
+        if ((addTitle != null)&&(!addTitle.equals("")))
+            partsService.add( addTitle, addEnabled, addAmount );
 
         parts = partsService.getAllParts(); //Todo: с этим дублированием разобраться
 
@@ -95,26 +97,6 @@ public class PartsController
             }
             else
                 filter = "NONE";
-
-        /**
-         * Добавление новой запчасти:
-         * - проверка заголовка;
-         * - статуса (необходимости);
-         * - указанного числа деталей.
-         */
-        Part part = new Part();
-        if ((addTitle != null)&&(!addTitle.equals("")))
-        {
-            part.setTitle(addTitle);
-
-            if ((addEnabled != null)&&(addEnabled.equals("on")))
-                part.setEnabled(true);
-
-            if ((addAmount != null) && (!addAmount.equals("")))
-                part.setAmount(new IntFromStringImpl().recognize(addAmount));
-
-            partsService.add(part);
-        }
 
         /**
          * Подсчет числа компьютеров, которые можно собрать из имеющихся запчастей.

@@ -12,6 +12,9 @@ public interface PartsService
     void changeEnabledStatus(String id);
     void update(Part part);
     void add(Part part);
+    void add(String addTitle, String addEnabled, String addAmount);
 
     void update(String updateID, String updateTitle, boolean saveEnabled, String updateAmount);
+
+
 }

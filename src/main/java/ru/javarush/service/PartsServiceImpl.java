@@ -14,13 +14,11 @@ import java.util.List;
  * @since 18.09.2018
  */
 @Service
-public class PartsServiceImpl implements PartsService
-{
+public class PartsServiceImpl implements PartsService {
     private PartsDAOImpl partsDAOimpl = new PartsDAOImpl();
     private IntFromStringImpl intFromString = new IntFromStringImpl();
 
-    public List<Part> getAllParts()
-    {
+    public List<Part> getAllParts() {
         return partsDAOimpl.getAllParts();
     }
 
@@ -28,46 +26,62 @@ public class PartsServiceImpl implements PartsService
      * Поиск запчастей в базе осуществляется вне зависимости от регистра.
      */
     @Override
-    public List<Part> searchParts(String pattern)
-    {
+    public List<Part> searchParts(String pattern) {
         return partsDAOimpl.searchParts(pattern);
     }
 
     @Override
-    public void delete(String id)
-    {
-        partsDAOimpl.deletePart( intFromString.recognize( id ) );
+    public void delete(String id) {
+        partsDAOimpl.deletePart(intFromString.recognize(id));
     }
 
     @Override
-    public void changeEnabledStatus(String id)
-    {
-        partsDAOimpl.changeEnabledStatus( intFromString.recognize( id ) );
+    public void changeEnabledStatus(String id) {
+        partsDAOimpl.changeEnabledStatus(intFromString.recognize(id));
     }
 
     @Override
-    public void update(Part part)
-    {
-        partsDAOimpl.updatePart( part );
+    public void update(Part part) {
+        partsDAOimpl.updatePart(part);
     }
 
     @Override
-    public void add(Part part)
-    {
-        partsDAOimpl.addPart( part );
+    public void add(Part part) {
+        partsDAOimpl.addPart(part);
+    }
+
+    /**
+     * Добавление новой запчасти:
+     * - проверка заголовка;
+     * - проверка статуса/необходимости (иначе false);
+     * - проверка указанного числа деталей (иначе 0).
+     */
+    @Override
+    public void add(String addTitle, String addEnabled, String addAmount) {
+
+        Part part = new Part();
+
+        part.setTitle(addTitle);
+
+        if ((addEnabled != null) && (addEnabled.equals("on")))
+            part.setEnabled(true);
+
+        if ((addAmount != null) && (!addAmount.equals("")))
+            part.setAmount(intFromString.recognize(addAmount));
+
+        add(part);
     }
 
     /**
      * Изменение данных имеющейся в базе запчасти.
      */
     @Override
-    public void update(String updateID, String updateTitle, boolean saveEnabled, String updateAmount)
-    {
+    public void update(String updateID, String updateTitle, boolean saveEnabled, String updateAmount) {
         Part part = new Part();
-        part.setId      ( intFromString.recognize( updateID ) );
-        part.setTitle   ( updateTitle     );
-        part.setEnabled ( saveEnabled     );
-        part.setAmount  ( intFromString.recognize(updateAmount) );
+        part.setId(intFromString.recognize(updateID));
+        part.setTitle(updateTitle);
+        part.setEnabled(saveEnabled);
+        part.setAmount(intFromString.recognize(updateAmount));
         update(part);
     }
 

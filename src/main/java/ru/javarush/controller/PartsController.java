@@ -13,8 +13,6 @@ import ru.javarush.service.utility.IntFromStringImpl;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * @author Victor Bugaenko
@@ -26,6 +24,7 @@ public class PartsController
 {
     private PartsService partsService = new PartsServiceImpl();
     private IntFromStringImpl intFromString = new IntFromStringImpl();
+    List<Part> parts =  partsService.getAllParts();
 
     @RequestMapping(value="/", method = RequestMethod.GET)
     public String partsListWithFilters(
@@ -55,6 +54,11 @@ public class PartsController
         if ((updateID != null)&&(!updateID.equals("")))
             partsService.update(updateID, updateTitle,saveEnabled, updateAmount);
 
+        parts = partsService.getAllParts(); //Todo: с этим дублированием разобраться
+
+        if ((searchTitle != null)&&(!searchTitle.equals("")))
+            parts = partsService.searchParts(searchTitle);
+
         /**
          * begin и end позволяют варьировать количество отображаемых записей на странице.
          */
@@ -67,27 +71,7 @@ public class PartsController
         int end = begin+limit-1;
 
         /**
-         * Фильтрация списка деталей по запрашиваемому имени.
-         * Поиск подстроки вне зависимости от регистра.
-         */
-        //TODO: нужно оптимизировать на уровне запроса к базе чтобы не тянуть из нее всех а потом еще и отсекать.
-        List<Part> parts =  partsService.getAllParts();
-        if ((searchTitle != null)&&(!searchTitle.equals("")))
-        {
-            parts = new ArrayList();
-            Pattern pt = Pattern.compile( searchTitle, Pattern.CASE_INSENSITIVE );
-            Matcher mt;
-
-            for(Part p : partsService.getAllParts())
-            {
-                mt = pt.matcher(p.getTitle());
-                if (mt.find())
-                parts.add(p);
-            }
-        }
-
-        /**
-         * Фильтрация списка деталей и удаление из него не соответствующих.
+         * Фильтрация по статусу включенности списка деталей и удаление из него не соответствующих.
          */
         //TODO: нужно оптимизировать на уровне запроса к базе чтобы не тянуть из нее всех а потом еще и отсекать.
             List<Part> partsTmp = new ArrayList();
@@ -151,6 +135,7 @@ public class PartsController
                                                           // и вообще можно уронить приложение, если там не число будет
         model.addAttribute("filter",      filter    );
         model.addAttribute("addNewPart",  addNewPart);
+        model.addAttribute("searchTitle", searchTitle);
         return "index";
     }
 

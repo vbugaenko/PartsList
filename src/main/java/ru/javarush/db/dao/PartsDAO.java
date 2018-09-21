@@ -17,4 +17,5 @@ public interface PartsDAO
     Part getPart( int id );
     List<Part> getAllParts();
     void changeEnabledStatus(int id);
+    List<Part> searchParts(String pattern);
 }

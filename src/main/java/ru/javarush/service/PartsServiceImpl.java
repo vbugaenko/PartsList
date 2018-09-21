@@ -24,6 +24,15 @@ public class PartsServiceImpl implements PartsService
         return partsDAOimpl.getAllParts();
     }
 
+    /**
+     * Поиск запчастей в базе осуществляется вне зависимости от регистра.
+     */
+    @Override
+    public List<Part> searchParts(String pattern)
+    {
+        return partsDAOimpl.searchParts(pattern);
+    }
+
     @Override
     public void delete(String id)
     {

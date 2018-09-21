@@ -111,4 +111,21 @@ public class PartsDAOImpl implements PartsDAO
         catch(Exception e)
         { loggerFileInf.error(e.getMessage()); }
     }
+
+    //Todo: код повторяется с getAllParts только запросы разные
+    @Override
+    public List<Part> searchParts(String pattern)
+    {
+        List<Part> parts = new ArrayList();
+        try ( Session session = cfg.buildSessionFactory().openSession() )
+        {
+            NativeQuery query = session.createNativeQuery("SELECT * FROM parts WHERE title REGEXP '"+pattern+"';");
+            query.addEntity(Part.class);
+            parts = query.list();
+            session.close();
+        }
+        catch (Exception e)
+        { loggerFileInf.error(e.getMessage()); }
+        return parts;
+    }
 }

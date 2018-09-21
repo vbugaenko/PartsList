@@ -7,6 +7,7 @@ import java.util.List;
 public interface PartsService
 {
     List<Part> getAllParts();
+    List<Part> searchParts(String pattern);
     void delete(String id);
     void changeEnabledStatus(String id);
     void update(Part part);

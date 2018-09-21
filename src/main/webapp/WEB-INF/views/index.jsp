@@ -127,7 +127,7 @@
                             ${part.getAmount()}
                         </c:if>
                         <c:if test="${part.getId() eq editIDInt}">
-                            <input type="text" id="updateAmount"   name="updateAmount" value="${part.getAmount()}" style="width: 30px;" />
+                            <input type="number" id="updateAmount"   name="updateAmount" value="${part.getAmount()}" style="width: 45px;" />
                         </c:if>
                     </td>
                     <!--Edit/Update button-->

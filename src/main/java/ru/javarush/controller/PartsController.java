@@ -47,10 +47,10 @@ public class PartsController
     {
 
         if ((activateID != null)&&(!activateID.equals("")))
-            partsService.changeEnabledStatus( intFromString.recognize(activateID) );
+            partsService.changeEnabledStatus( activateID );
 
         if ((deleteID != null)&&(!deleteID.equals("")))
-            partsService.delete( intFromString.recognize(deleteID) );
+            partsService.delete( deleteID );
 
         if ((updateID != null)&&(!updateID.equals("")))
             partsService.update(updateID, updateTitle,saveEnabled, updateAmount);

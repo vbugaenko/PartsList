@@ -59,10 +59,10 @@
 
         <!--form for add new part-->
         <c:if test="${not empty addNewPart}">
-        <div style="clear: both; margin: 40px 0 0 0; ">
-            name <input type="text" id="addTitle" name="addTitle" />
+        <div style="clear: both; margin: 40px 0 -20px 0; ">
+            name <input type="text" id="addTitle" name="addTitle" style="width: 140px;" />
             enabled <input type="checkbox" id="addEnabled" name="addEnabled" />
-            amount <input type="text" id="addAmount"   name="addAmount"  style="width: 40px;"/>
+            amount <input type="number" id="addAmount"   name="addAmount"  style="width: 40px;"/>
             <button onclick="document.getElementById('').value = ''; " style="padding: 0px; margin: 0 0 0 20px;">
                 <img src="http://image.flaticon.com/icons/png/512/257/257831.png" width="15">
             </button>

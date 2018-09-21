@@ -3,6 +3,7 @@ package ru.javarush.service;
 import org.springframework.stereotype.Service;
 import ru.javarush.db.dao.PartsDAOImpl;
 import ru.javarush.db.entity.Part;
+import ru.javarush.service.utility.IntFromStringImpl;
 
 import java.util.List;
 
@@ -16,6 +17,7 @@ import java.util.List;
 public class PartsServiceImpl implements PartsService
 {
     private PartsDAOImpl partsDAOimpl = new PartsDAOImpl();
+    private IntFromStringImpl intFromString = new IntFromStringImpl();
 
     public List<Part> getAllParts()
     {
@@ -45,4 +47,19 @@ public class PartsServiceImpl implements PartsService
     {
         partsDAOimpl.addPart( part );
     }
+
+    /**
+     * Изменение данных имеющейся в базе запчасти.
+     */
+    @Override
+    public void update(String updateID, String updateTitle, boolean saveEnabled, String updateAmount)
+    {
+        Part part = new Part();
+        part.setId      ( intFromString.recognize( updateID ) );
+        part.setTitle   ( updateTitle     );
+        part.setEnabled ( saveEnabled     );
+        part.setAmount  ( intFromString.recognize(updateAmount) );
+        update(part);
+    }
+
 }

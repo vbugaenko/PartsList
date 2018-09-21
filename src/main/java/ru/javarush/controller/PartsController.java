@@ -52,32 +52,8 @@ public class PartsController
         if ((deleteID != null)&&(!deleteID.equals("")))
             partsService.delete( intFromString.recognize(deleteID) );
 
-        /**
-         *
-         */
-
-        int updateAmountInt=0;
-        if ((updateAmount != null)&&(!updateAmount.equals("")))
-        {
-            updateAmountInt = new IntFromStringImpl().recognize(updateAmount);
-        }
-
         if ((updateID != null)&&(!updateID.equals("")))
-        {
-            Part part = new Part();
-            part.setId      ( intFromString.recognize( updateID ) );
-            part.setTitle   ( updateTitle     );
-            part.setEnabled ( saveEnabled     );
-            part.setAmount  ( updateAmountInt );
-            partsService.update(part);
-        }
-
-        String editIDInt = null;
-        if ((editID != null)&&(!editID.equals("")))
-        {
-            editIDInt = editID;
-        }
-
+            partsService.update(updateID, updateTitle,saveEnabled, updateAmount);
 
         /**
          * begin и end позволяют варьировать количество отображаемых записей на странице.
@@ -171,7 +147,8 @@ public class PartsController
         model.addAttribute("endInt",      end       );
         model.addAttribute("page",        pageInt   );
         model.addAttribute("sborka",      min       );
-        model.addAttribute("editIDInt",   editIDInt );
+        model.addAttribute("editIDInt",   editID    );  //TODO: по хорошему это все в JSP может через JS
+                                                          // и вообще можно уронить приложение, если там не число будет
         model.addAttribute("filter",      filter    );
         model.addAttribute("addNewPart",  addNewPart);
         return "index";

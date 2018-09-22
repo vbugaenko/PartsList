@@ -20,7 +20,7 @@ public class PartsServiceImpl implements PartsService
     private enum Filter { NONE, DISABLED, ACTIVE }
     private List<Part> parts;
     private int page = 1;
-    private int pagesCalc;
+    private int pagesCalc=1;
 
     /**
      * limit позволяет варьировать количеством отображаемых записей на странице.
@@ -46,6 +46,7 @@ public class PartsServiceImpl implements PartsService
 
     /**
      * В зависимости от фильтра или наличия задания на поиск используется разный sql запрос.
+     * Фильтрация (enabled) действует по результатам поиска;
      */
     @Override
     public List<Part> getParts(String filter, String search, String pageStr)
@@ -53,14 +54,16 @@ public class PartsServiceImpl implements PartsService
         if ((pageStr != null)&&(!pageStr.equals("")))
             page = intFromString.recognize( pageStr );
 
+        String searchStr="";
         if ((search != null)&&(!search.equals("")))
-            parts = partsDAOimpl.getParts("SELECT SQL_CALC_FOUND_ROWS * FROM parts ORDER BY title  WHERE title REGEXP '"+search+"' LIMIT "+ begin() +", "+limit+";");
-        else if (filerEnum(filter) == Filter.ACTIVE)
-            parts = partsDAOimpl.getParts("SELECT SQL_CALC_FOUND_ROWS * FROM parts ORDER BY title  WHERE enabled=1 LIMIT "+ begin() +", "+limit+";");
+            searchStr="AND title REGEXP '"+search+"'";
+
+        if (filerEnum(filter) == Filter.ACTIVE)
+            parts = partsDAOimpl.getParts("SELECT SQL_CALC_FOUND_ROWS * FROM parts WHERE enabled=1 "+searchStr+" LIMIT " + begin() + ", "+limit+";");
         else if (filerEnum(filter) == Filter.DISABLED)
-            parts = partsDAOimpl.getParts("SELECT SQL_CALC_FOUND_ROWS * FROM parts ORDER BY title  WHERE enabled=0 LIMIT "+ begin() +", "+limit+";");
+            parts = partsDAOimpl.getParts("SELECT SQL_CALC_FOUND_ROWS * FROM parts WHERE enabled=0 "+searchStr+" LIMIT " + begin() + ", "+limit+";");
         else
-            parts = partsDAOimpl.getParts("SELECT SQL_CALC_FOUND_ROWS * FROM parts ORDER BY title LIMIT "+ begin() +", "+limit+";");
+            parts = partsDAOimpl.getParts("SELECT SQL_CALC_FOUND_ROWS * FROM parts WHERE enabled=1 OR enabled=0 "+searchStr+" LIMIT "+ begin() +", "+limit+";");
 
         pagesCalc = (int)(Math.ceil(partsDAOimpl.pagesCalc()/10.0));
         return parts;

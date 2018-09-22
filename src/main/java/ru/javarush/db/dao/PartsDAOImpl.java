@@ -80,6 +80,7 @@ public class PartsDAOImpl implements PartsDAO
             query.addEntity(Part.class);
             parts = query.list();
             query = session.createNativeQuery( "SELECT FOUND_ROWS();" );
+
             //Todo: java.math.BigInteger cannot be cast to java.lang.Integer ??
             pagesCalc = Integer.parseInt(query.list().get(0).toString());
             session.close();

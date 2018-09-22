@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import ru.javarush.db.entity.Part;
 import ru.javarush.service.PartsService;
-import ru.javarush.service.PartsServiceImpl;
 
 import java.util.List;
 

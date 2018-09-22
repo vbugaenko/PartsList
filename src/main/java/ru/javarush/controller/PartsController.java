@@ -1,5 +1,6 @@
 package ru.javarush.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,7 +21,8 @@ import java.util.List;
 @Controller
 public class PartsController
 {
-    private PartsService partsService = new PartsServiceImpl();
+    @Autowired
+    private PartsService partsService;
 
     @RequestMapping(value="/", method = RequestMethod.GET)
     public String partsListWithFilters(

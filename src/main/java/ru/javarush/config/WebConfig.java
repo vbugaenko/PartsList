@@ -8,6 +8,12 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
+import ru.javarush.db.dao.PartsDAO;
+import ru.javarush.db.dao.PartsDAOImpl;
+import ru.javarush.service.PartsService;
+import ru.javarush.service.PartsServiceImpl;
+import ru.javarush.service.utility.IntFromString;
+import ru.javarush.service.utility.IntFromStringImpl;
 
 /**
  * @author Victor Bugaenko
@@ -38,5 +44,17 @@ public class WebConfig extends WebMvcConfigurerAdapter
         viewResolver.setSuffix(".jsp");
         viewResolver.setViewClass(JstlView.class);
         return viewResolver;
+    }
+    @Bean(name="PartsService")
+    PartsService partsService() {
+        return new PartsServiceImpl();
+    }
+    @Bean
+    PartsDAO partsDAO() {
+        return new PartsDAOImpl();
+    }
+    @Bean
+    IntFromString intFromString() {
+        return new IntFromStringImpl();
     }
 }

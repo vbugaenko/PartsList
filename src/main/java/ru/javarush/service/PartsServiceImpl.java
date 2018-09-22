@@ -1,9 +1,10 @@
 package ru.javarush.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.javarush.db.dao.PartsDAOImpl;
+import ru.javarush.db.dao.PartsDAO;
 import ru.javarush.db.entity.Part;
-import ru.javarush.service.utility.IntFromStringImpl;
+import ru.javarush.service.utility.IntFromString;
 
 import java.util.List;
 
@@ -15,12 +16,16 @@ import java.util.List;
 @Service
 public class PartsServiceImpl implements PartsService
 {
-    private PartsDAOImpl partsDAOimpl = new PartsDAOImpl();
-    private IntFromStringImpl intFromString = new IntFromStringImpl();
+    @Autowired
+    private PartsDAO partsDAO;
+    @Autowired
+    private IntFromString intFromString;
     private List<Part> parts;
     private int page = 1;
     private int pagesCalc=1;
     private Filter filter = Filter.NONE;
+
+
     /**
      * limit позволяет варьировать количеством отображаемых записей на странице.
      */
@@ -73,24 +78,24 @@ public class PartsServiceImpl implements PartsService
             searchStr="AND title REGEXP '"+search+"'";
 
         if (filter == Filter.ACTIVE)
-            parts = partsDAOimpl.getParts("SELECT SQL_CALC_FOUND_ROWS * FROM parts WHERE enabled=1 "+searchStr+" LIMIT " + begin() + ", "+limit+";");
+            parts = partsDAO.getParts("SELECT SQL_CALC_FOUND_ROWS * FROM parts WHERE enabled=1 "+searchStr+" LIMIT " + begin() + ", "+limit+";");
         else if (filter == Filter.DISABLED)
-            parts = partsDAOimpl.getParts("SELECT SQL_CALC_FOUND_ROWS * FROM parts WHERE enabled=0 "+searchStr+" LIMIT " + begin() + ", "+limit+";");
+            parts = partsDAO.getParts("SELECT SQL_CALC_FOUND_ROWS * FROM parts WHERE enabled=0 "+searchStr+" LIMIT " + begin() + ", "+limit+";");
         else
-            parts = partsDAOimpl.getParts("SELECT SQL_CALC_FOUND_ROWS * FROM parts WHERE enabled=1 OR enabled=0 "+searchStr+" LIMIT "+ begin() +", "+limit+";");
+            parts = partsDAO.getParts("SELECT SQL_CALC_FOUND_ROWS * FROM parts WHERE enabled=1 OR enabled=0 "+searchStr+" LIMIT "+ begin() +", "+limit+";");
 
-        pagesCalc = (int)(Math.ceil(partsDAOimpl.pagesCalc()/10.0));
+        pagesCalc = (int)(Math.ceil(partsDAO.pagesCalc()/10.0));
         return parts;
     }
 
     @Override
     public void delete(String id) {
-        partsDAOimpl.deletePart(intFromString.recognize(id));
+        partsDAO.deletePart(intFromString.recognize(id));
     }
 
     @Override
     public void add(Part part) {
-        partsDAOimpl.addPart(part);
+        partsDAO.addPart(part);
     }
 
     @Override
@@ -111,12 +116,12 @@ public class PartsServiceImpl implements PartsService
 
     @Override
     public void changeEnabledStatus(String id) {
-        partsDAOimpl.changeEnabledStatus(intFromString.recognize(id));
+        partsDAO.changeEnabledStatus(intFromString.recognize(id));
     }
 
     @Override
     public void update(Part part) {
-        partsDAOimpl.updatePart(part);
+        partsDAO.updatePart(part);
     }
 
     @Override

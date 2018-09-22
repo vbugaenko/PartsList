@@ -1,5 +1,6 @@
 package ru.javarush.controller;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,6 +21,9 @@ import java.util.List;
 @Controller
 public class PartsController
 {
+    private final Logger loggerFileInf = Logger.getLogger("fileinf");
+    private final Logger loggerConsoleInf = Logger.getLogger("consoleinf");
+
     @Autowired
     private PartsService partsService;
 
@@ -42,16 +46,9 @@ public class PartsController
             @RequestParam(value = "newFilter",    required = false) String newFilter,
             Model model )
     {
-        if ((activateID != null)&&(!activateID.equals("")))
             partsService.changeEnabledStatus( activateID );
-
-        if ((updateID != null)&&(!updateID.equals("")))
-            partsService.update(updateID, updateTitle,saveEnabled, updateAmount);
-
-        if ((deleteID != null)&&(!deleteID.equals("")))
+            partsService.update( updateID, updateTitle,saveEnabled, updateAmount );
             partsService.delete( deleteID );
-
-        if ((addTitle != null)&&(!addTitle.equals("")))
             partsService.add( addTitle, addEnabled, addAmount );
 
         List<Part> parts = partsService.getParts( filter, newFilter, searchTitle, page );

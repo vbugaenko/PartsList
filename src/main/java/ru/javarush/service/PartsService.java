@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface PartsService
 {
-    enum Filter { NONE, DISABLED, ACTIVE }
+    enum FilterEnum { NONE, DISABLED, ACTIVE }
     List<Part> getParts(String filter, String newFilter, String search, String page);
     void delete(String id);
     void changeEnabledStatus(String id);
@@ -16,5 +16,5 @@ public interface PartsService
     void update(String updateID, String updateTitle, boolean saveEnabled, String updateAmount);
     int min();
     int getPagesCalc();
-    Filter getFilter();
+    FilterEnum getFilter();
 }

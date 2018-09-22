@@ -11,10 +11,10 @@ import java.util.List;
 
 public interface PartsDAO
 {
-    void deletePart(int id );
-    void addPart(Part part );
-    void updatePart(Part part );
-    List<Part> getParts(String sql);
-    void changeEnabledStatus(int id);
-    int pagesCalc();
+    void deletePart          ( int id     );
+    void addPart             ( Part part  );
+    void updatePart          ( Part part  );
+    List<Part> getParts      ( String sql );
+    void changeEnabledStatus ( int id     );
+    int pagesCalc            ();
 }

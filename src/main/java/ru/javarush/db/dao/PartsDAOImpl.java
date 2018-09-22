@@ -19,8 +19,8 @@ import java.util.List;
 public class PartsDAOImpl implements PartsDAO
 {
     private Configuration cfg = new org.hibernate.cfg.Configuration().configure("hibernate.cfg.xml");
-    final Logger loggerFileInf = Logger.getLogger("fileinf");
-    final Logger loggerConsoleInf = Logger.getLogger("consoleinf");
+    private final Logger loggerFileInf = Logger.getLogger("fileinf");
+    private final Logger loggerConsoleInf = Logger.getLogger("consoleinf");
     private int pagesCalc=1;
 
     @Override
@@ -53,12 +53,12 @@ public class PartsDAOImpl implements PartsDAO
     }
 
     @Override
-    public void updatePart(Part newPart)
+    public void updatePart(Part part)
     {
         try (Session session = cfg.buildSessionFactory().openSession())
         {
             session.beginTransaction();
-            session.update(newPart);
+            session.update(part);
             session.getTransaction().commit();
             session.close();
         }

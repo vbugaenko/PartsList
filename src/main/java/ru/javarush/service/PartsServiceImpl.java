@@ -1,5 +1,6 @@
 package ru.javarush.service;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.javarush.db.dao.PartsDAO;
@@ -7,6 +8,10 @@ import ru.javarush.db.entity.Part;
 import ru.javarush.service.utility.IntFromString;
 
 import java.util.List;
+
+import static ru.javarush.service.PartsService.FilterEnum.ACTIVE;
+import static ru.javarush.service.PartsService.FilterEnum.DISABLED;
+import static ru.javarush.service.PartsService.FilterEnum.NONE;
 
 /**
  * @author Victor Bugaenko
@@ -16,46 +21,41 @@ import java.util.List;
 @Service
 public class PartsServiceImpl implements PartsService
 {
+    private final Logger loggerFileInf = Logger.getLogger("fileinf");
+    private final Logger loggerConsoleInf = Logger.getLogger("consoleinf");
+
     @Autowired
     private PartsDAO partsDAO;
     @Autowired
     private IntFromString intFromString;
     private List<Part> parts;
     private int page = 1;
-    private int pagesCalc=1;
-    private Filter filter = Filter.NONE;
-
+    private int pagesCalc = 1;
+    private FilterEnum filter = NONE;
 
     /**
-     * limit позволяет варьировать количеством отображаемых записей на странице.
+     * переменная отвечает за количеством отображаемых записей с запчастями на странице.
      */
     private int limit = 10;
 
-
     /**
-     * @param filter принимается текущее значение
-     * @return выставляется следующее
+     * Метод распознает текущий фильтр (из строки в enum).
      */
-    private Filter currentFilter(String filter)
+    private FilterEnum recognizeCurrentFilter(String filter)
     {
-        if ((filter==null)||(filter.equals("NONE")))
-            return Filter.NONE;
-        if (filter.equals("ACTIVE"))
-            return Filter.ACTIVE;
-        else if (filter.equals("DISABLED"))
-            return Filter.DISABLED;
-
-        return Filter.NONE;
+        if ((filter!=null)&&(filter.equals("ACTIVE"))) return ACTIVE;
+        else if ((filter!=null)&&(filter.equals("DISABLED"))) return DISABLED;
+        else return NONE;
     }
 
-    private Filter newFilter()
+    /**
+     * Метод меняет фильтр на следующий (NONE → ACTIVE → DISABLED → NONE).
+     */
+    private FilterEnum setNewFilter()
     {
-        if (filter == Filter.NONE)
-            return Filter.ACTIVE;
-        if (filter == Filter.ACTIVE)
-            return Filter.DISABLED;
-        else
-            return Filter.NONE;
+        if (filter == NONE)   return ACTIVE;
+        if (filter == ACTIVE) return DISABLED;
+        else return NONE;
     }
 
     /**
@@ -64,36 +64,51 @@ public class PartsServiceImpl implements PartsService
     @Override
     public List<Part> getParts(String currentFilter, String newFilter, String search, String pageStr)
     {
-        filter = currentFilter(currentFilter);
+        filter = recognizeCurrentFilter(currentFilter);
 
         if ((newFilter != null)&&(!newFilter.equals("")))
-            filter = newFilter();
-
+            filter = setNewFilter();
 
         if ((pageStr != null)&&(!pageStr.equals("")))
             page = intFromString.recognize( pageStr );
 
-        String searchStr="";
-        if ((search != null)&&(!search.equals("")))
-            searchStr="AND title REGEXP '"+search+"'";
-
-        String str;
-        if (filter == Filter.ACTIVE)
-            str = "enabled=1";
-        else if (filter == Filter.DISABLED)
-            str = "enabled=0";
-        else
-            str = "enabled=1 OR enabled=0 ";
-
-        parts = partsDAO.getParts("SELECT SQL_CALC_FOUND_ROWS * FROM parts WHERE "+str + searchStr+" LIMIT " + begin() + ", "+limit+";");
+        parts = partsDAO.getParts("SELECT SQL_CALC_FOUND_ROWS * FROM parts " + where() + searchStr(search)+" LIMIT " + begin() + ", "+limit+";");
 
         pagesCalc = (int)(Math.ceil(partsDAO.pagesCalc()/10.0));
         return parts;
     }
 
+    /**
+     * В зависимости от значения переменной filter метод вернет часть sql запроса
+     * для фильтрации данных при отборе их из БД.
+     */
+    private String where()
+    {
+        if (filter == ACTIVE)
+            return "WHERE enabled=1";
+        else if (filter == DISABLED)
+            return "WHERE enabled=0";
+        else
+            return "WHERE enabled=1 OR enabled=0 ";
+    }
+
+    /**
+     * Если входящая строка (@param search) содержит какие-то данные,
+     * то метод вернет (@return) часть sql запроса для их поиска в БД.
+     */
+    private String searchStr(String search)
+    {
+        String searchStr="";
+        if ((search != null)&&(!search.equals("")))
+            searchStr="AND title REGEXP '"+search+"'";
+        return searchStr;
+    }
+
     @Override
-    public void delete(String id) {
-        partsDAO.deletePart(intFromString.recognize(id));
+    public void delete(String id)
+    {
+        if ((id != null)&&(!id.equals("")))
+            partsDAO.deletePart(intFromString.recognize(id));
     }
 
     @Override
@@ -101,25 +116,32 @@ public class PartsServiceImpl implements PartsService
         partsDAO.addPart(part);
     }
 
+    /**
+     * Метод добавляет новую запчасть в БД.
+     * @param addTitle название запчасти
+     * @param addEnabled ее необходимость для (текущей) сборки
+     * @param addAmount количество в наличии
+     */
     @Override
     public void add(String addTitle, String addEnabled, String addAmount)
     {
-        Part part = new Part();
-
-        part.setTitle(addTitle);
-
-        if ((addEnabled != null) && (addEnabled.equals("on")))
-            part.setEnabled(true);
-
-        if ((addAmount != null) && (!addAmount.equals("")))
-            part.setAmount(intFromString.recognize(addAmount));
-
-        add(part);
+        if ((addTitle != null)&&(!addTitle.equals("")))
+        {
+            Part part = new Part();
+            part.setTitle(addTitle);
+            if ((addEnabled != null) && (addEnabled.equals("on")))
+                part.setEnabled(true);
+            if ((addAmount != null) && (!addAmount.equals("")))
+                part.setAmount(intFromString.recognize(addAmount));
+            add(part);
+        }
     }
 
     @Override
-    public void changeEnabledStatus(String id) {
-        partsDAO.changeEnabledStatus(intFromString.recognize(id));
+    public void changeEnabledStatus(String id)
+    {
+        if ((id != null)&&(!id.equals("")))
+            partsDAO.changeEnabledStatus(intFromString.recognize(id));
     }
 
     @Override
@@ -130,12 +152,15 @@ public class PartsServiceImpl implements PartsService
     @Override
     public void update(String updateID, String updateTitle, boolean saveEnabled, String updateAmount)
     {
-        Part part = new Part();
-        part.setId(intFromString.recognize(updateID));
-        part.setTitle(updateTitle);
-        part.setEnabled(saveEnabled);
-        part.setAmount(intFromString.recognize(updateAmount));
-        update(part);
+        if ((updateID != null)&&(!updateID.equals("")))
+        {
+            Part part = new Part();
+            part.setId(intFromString.recognize(updateID));
+            part.setTitle(updateTitle);
+            part.setEnabled(saveEnabled);
+            part.setAmount(intFromString.recognize(updateAmount));
+            update(part);
+        }
     }
 
     /**
@@ -152,12 +177,7 @@ public class PartsServiceImpl implements PartsService
         return min;
     }
 
-    public int end()
-    {
-        return begin()+limit;
-    }
-
-    public int begin()
+    private int begin()
     {
         return (page-1)*limit;
     }
@@ -167,6 +187,6 @@ public class PartsServiceImpl implements PartsService
         return pagesCalc;
     }
 
-    public Filter getFilter() { return filter; }
+    public FilterEnum getFilter() { return filter; }
 
 }

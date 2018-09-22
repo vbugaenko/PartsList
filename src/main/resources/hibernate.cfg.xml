@@ -7,8 +7,7 @@
         <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
         <property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
         <property name="hibernate.connection.username">root</property>
-        <!--Todo: Поменять пароль на root-->
-        <property name="hibernate.connection.password">Ka2154200</property>
+        <property name="hibernate.connection.password">root</property>
         <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/test</property>
         <property name="hibernate.current_session_context_class">
             org.hibernate.context.internal.ThreadLocalSessionContext

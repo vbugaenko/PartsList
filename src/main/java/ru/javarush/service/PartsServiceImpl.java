@@ -54,13 +54,13 @@ public class PartsServiceImpl implements PartsService
             page = intFromString.recognize( pageStr );
 
         if ((search != null)&&(!search.equals("")))
-            parts = partsDAOimpl.getParts("SELECT SQL_CALC_FOUND_ROWS * FROM parts WHERE title REGEXP '"+search+"' LIMIT "+ begin() +", 10;");
+            parts = partsDAOimpl.getParts("SELECT SQL_CALC_FOUND_ROWS * FROM parts ORDER BY title  WHERE title REGEXP '"+search+"' LIMIT "+ begin() +", 10;");
         else if (filerEnum(filter) == Filter.ACTIVE)
-            parts = partsDAOimpl.getParts("SELECT SQL_CALC_FOUND_ROWS * FROM parts WHERE enabled=1 LIMIT "+ begin() +", 10;");
+            parts = partsDAOimpl.getParts("SELECT SQL_CALC_FOUND_ROWS * FROM parts ORDER BY title  WHERE enabled=1 LIMIT "+ begin() +", 10;");
         else if (filerEnum(filter) == Filter.DISABLED)
-            parts = partsDAOimpl.getParts("SELECT SQL_CALC_FOUND_ROWS * FROM parts WHERE enabled=0 LIMIT "+ begin() +", 10;");
+            parts = partsDAOimpl.getParts("SELECT SQL_CALC_FOUND_ROWS * FROM parts ORDER BY title  WHERE enabled=0 LIMIT "+ begin() +", 10;");
         else
-            parts = partsDAOimpl.getParts("SELECT SQL_CALC_FOUND_ROWS * FROM parts ORDER BY id LIMIT "+ begin() +", 10;");
+            parts = partsDAOimpl.getParts("SELECT SQL_CALC_FOUND_ROWS * FROM parts ORDER BY title LIMIT "+ begin() +", 10;");
 
         pagesCalc = (int)(Math.ceil(partsDAOimpl.pagesCalc()/10.0));
         return parts;

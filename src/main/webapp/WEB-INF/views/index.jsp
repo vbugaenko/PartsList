@@ -94,7 +94,7 @@
                 <td>edt                      </td>
             </tr>
 
-            <c:forEach var="part" items="${parts}" varStatus="loopStatus" begin="${beginInt}" end="${endInt}">
+            <c:forEach var="part" items="${parts}" >
 
 
                 <tr style="<c:if test="${!part.isEnabled()}">color: silver;</c:if>
@@ -159,7 +159,7 @@
 
     <!--Pages-->
     <div class="mainBlocks">
-        <c:forEach var="part" items="${parts}" step="10">
+        <c:forEach  begin="1" end="${pagesCalc}" varStatus="loop" >
             <c:set var="countB" value="${countB+1}"/>
             <button onclick="document.getElementById('page').value = '${countB}';">${countB}</button>
         </c:forEach>

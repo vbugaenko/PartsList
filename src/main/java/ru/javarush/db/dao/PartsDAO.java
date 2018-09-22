@@ -16,4 +16,5 @@ public interface PartsDAO
     void updatePart(Part part );
     List<Part> getParts(String sql);
     void changeEnabledStatus(int id);
+    int pagesCalc();
 }

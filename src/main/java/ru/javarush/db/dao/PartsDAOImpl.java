@@ -21,6 +21,7 @@ public class PartsDAOImpl implements PartsDAO
     private Configuration cfg = new org.hibernate.cfg.Configuration().configure("hibernate.cfg.xml");
     final Logger loggerFileInf = Logger.getLogger("fileinf");
     final Logger loggerConsoleInf = Logger.getLogger("consoleinf");
+    private int pagesCalc=1;
 
     @Override
     public void deletePart(int id)
@@ -65,6 +66,10 @@ public class PartsDAOImpl implements PartsDAO
         { loggerFileInf.error(e.getMessage()); }
     }
 
+    /**
+     * Кроме основного запроса на отбор нужных данных,
+     * используется и второй запрос на подсчет общего числа строк в БД соответвующих запросу.
+     */
     @Override
     public List<Part> getParts(String sql)
     {
@@ -74,6 +79,12 @@ public class PartsDAOImpl implements PartsDAO
             NativeQuery query = session.createNativeQuery( sql );
             query.addEntity(Part.class);
             parts = query.list();
+            //Todo!
+            System.out.println( sql );
+            System.out.println("Из базы "+parts.size());
+            query = session.createNativeQuery( "SELECT FOUND_ROWS();" );
+            //Todo: java.math.BigInteger cannot be cast to java.lang.Integer ??
+            pagesCalc = Integer.parseInt(query.list().get(0).toString());
             session.close();
         }
         catch (Exception e)
@@ -95,6 +106,12 @@ public class PartsDAOImpl implements PartsDAO
         }
         catch(Exception e)
         { loggerFileInf.error(e.getMessage()); }
+    }
+
+    @Override
+    public int pagesCalc()
+    {
+        return pagesCalc;
     }
 
 }

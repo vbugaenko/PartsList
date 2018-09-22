@@ -8,11 +8,10 @@ import ru.javarush.service.utility.IntFromStringImpl;
 import java.util.List;
 
 /**
- * Services
- *
  * @author Victor Bugaenko
  * @since 18.09.2018
  */
+
 @Service
 public class PartsServiceImpl implements PartsService
 {
@@ -20,6 +19,14 @@ public class PartsServiceImpl implements PartsService
     private IntFromStringImpl intFromString = new IntFromStringImpl();
     private enum Filter { NONE, DISABLED, ACTIVE }
     private List<Part> parts;
+    private int page = 1;
+    private int pagesCalc;
+
+    /**
+     * limit позволяет варьировать количеством отображаемых записей на странице.
+     */
+    private int limit = 10;
+
 
     /**
      * @param filter принимается текущее значение
@@ -41,16 +48,21 @@ public class PartsServiceImpl implements PartsService
      * В зависимости от фильтра или наличия задания на поиск используется разный sql запрос.
      */
     @Override
-    public List<Part> getParts(String filter, String search )
+    public List<Part> getParts(String filter, String search, String pageStr)
     {
+        if ((pageStr != null)&&(!pageStr.equals("")))
+            page = intFromString.recognize( pageStr );
+
         if ((search != null)&&(!search.equals("")))
-            parts = partsDAOimpl.getParts("SELECT * FROM parts WHERE title REGEXP '"+search+"';");
+            parts = partsDAOimpl.getParts("SELECT SQL_CALC_FOUND_ROWS * FROM parts WHERE title REGEXP '"+search+"' LIMIT "+ begin() +", 10;");
         else if (filerEnum(filter) == Filter.ACTIVE)
-            parts = partsDAOimpl.getParts("SELECT * FROM parts WHERE enabled=1;");
+            parts = partsDAOimpl.getParts("SELECT SQL_CALC_FOUND_ROWS * FROM parts WHERE enabled=1 LIMIT "+ begin() +", 10;");
         else if (filerEnum(filter) == Filter.DISABLED)
-            parts = partsDAOimpl.getParts("SELECT * FROM parts WHERE enabled=0;");
+            parts = partsDAOimpl.getParts("SELECT SQL_CALC_FOUND_ROWS * FROM parts WHERE enabled=0 LIMIT "+ begin() +", 10;");
         else
-            parts = partsDAOimpl.getParts("SELECT * FROM parts;");
+            parts = partsDAOimpl.getParts("SELECT SQL_CALC_FOUND_ROWS * FROM parts ORDER BY id LIMIT "+ begin() +", 10;");
+
+        pagesCalc = (int)(Math.ceil(partsDAOimpl.pagesCalc()/10.0));
         return parts;
     }
 
@@ -113,6 +125,21 @@ public class PartsServiceImpl implements PartsService
             if (p.isEnabled() &&( (min == 0)||(p.getAmount() < min)) )
                 min = p.getAmount();
         return min;
+    }
+
+    public int end()
+    {
+        return begin()+limit;
+    }
+
+    public int begin()
+    {
+        return (page-1)*limit;
+    }
+
+    public int getPagesCalc()
+    {
+        return pagesCalc;
     }
 
 }

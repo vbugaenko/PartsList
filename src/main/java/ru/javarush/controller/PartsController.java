@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import ru.javarush.db.entity.Part;
 import ru.javarush.service.PartsService;
 import ru.javarush.service.PartsServiceImpl;
-import ru.javarush.service.utility.IntFromStringImpl;
 
 import java.util.List;
 
@@ -22,7 +21,6 @@ import java.util.List;
 public class PartsController
 {
     private PartsService partsService = new PartsServiceImpl();
-    private IntFromStringImpl intFromString = new IntFromStringImpl();
 
     @RequestMapping(value="/", method = RequestMethod.GET)
     public String partsListWithFilters(
@@ -54,30 +52,17 @@ public class PartsController
         if ((addTitle != null)&&(!addTitle.equals("")))
             partsService.add( addTitle, addEnabled, addAmount );
 
-        List<Part> parts = partsService.getParts( filter, searchTitle );
-
-        /**
-         * begin и end позволяют варьировать количество отображаемых записей на странице.
-         */
-        int limit = 10;
-        int pageInt = 1;
-        if ((page != null)&&(!page.equals("")))
-            pageInt = intFromString.recognize( page );
-        //TODO: перенести begin и end в JSP
-        int begin = (pageInt-1)*limit;
-        int end = begin+limit-1;
-
-
-        model.addAttribute("parts",       parts     );
-        model.addAttribute("beginInt",    begin     );
-        model.addAttribute("endInt",      end       );
-        model.addAttribute("page",        pageInt   );
-        model.addAttribute("sborka",      partsService.min() );
-        model.addAttribute("editIDInt",   editID    );  //TODO: по хорошему это все в JSP может через JS
-                                                          // и вообще можно уронить приложение, если там не число будет
+        List<Part> parts = partsService.getParts( filter, searchTitle, page );
+        //Todo!
+        System.out.println("Размер"+parts.size());
+        model.addAttribute("parts",       parts                          );
+        model.addAttribute("page",        page                           );
+        model.addAttribute("pagesCalc",   partsService.getPagesCalc()    );
+        model.addAttribute("sborka",      partsService.min()             );
+        model.addAttribute("editIDInt",   editID                         );
         model.addAttribute("filter",      partsService.filerEnum(filter) );
-        model.addAttribute("addNewPart",  addNewPart);
-        model.addAttribute("searchTitle", searchTitle);
+        model.addAttribute("addNewPart",  addNewPart                     );
+        model.addAttribute("searchTitle", searchTitle                    );
         return "index";
     }
 

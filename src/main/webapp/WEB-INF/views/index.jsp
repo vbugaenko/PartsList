@@ -18,39 +18,35 @@
     <input type="hidden" id="filterField" name="filterField" value="${filter}" />
     <input type="hidden" id="addNewPart"  name="addNewPart"           />
 
+    <!--MainForm-->
     <div class="mainBlocks">
-
         <div>
             <!--AddNewPart-->
             <div style="float:left;">
-                    <!--button: add-->
-                    <c:if test="${empty addNewPart}">
-                        <button onclick="document.getElementById('addNewPart').value = '1';">
-                            <img src=
-                         "https://ru.seaicons.com/wp-content/uploads/2017/02/Button-Add-icon.png"
-                                 width="10" height="10" />
-                        </button>
-                    </c:if>
-                    <!--button: cancel-->
-                    <c:if test="${not empty addNewPart}">
-                        <button onclick="document.getElementById('addNewPart').value = '';">
-                            <img src=
-                        "https://icon-icons.com/icons2/1150/PNG/512/1486504817-delete-minus-cancel-exit-remove_81373.png"
-                                 width="10" height="10" />
-                        </button>
-                    </c:if>
+                <!--button: add-->
+                <c:if test="${empty addNewPart}">
+                    <button onclick="document.getElementById('addNewPart').value = '1';">
+                        <img src= "resources/img/add.png" width="20" height="20" />
+                    </button>
+                </c:if>
+                <!--button: cancel-->
+                <c:if test="${not empty addNewPart}">
+                    <button onclick="document.getElementById('addNewPart').value = '';">
+                        <img src= "resources/img/yellow_minus.png" width="20" height="20" />
+                    </button>
+                </c:if>
             </div>
             <!--Search-->
             <div style="float:right;" align="right">
                 <input type="text" id="searchTitle"   name="searchTitle"  placeholder="search by title" value="${searchTitle}"/>
                 <c:if test="${empty searchTitle}">
                 <button>
-                    <img src="http://cropas.by/wp-content/uploads/2015/07/search.png" width="10" height="10">
+                    <img src="resources/img/search.png" width="10" height="10">
                 </button>
                 </c:if>
                 <c:if test="${not empty searchTitle}">
                 <button onclick="document.getElementById('searchTitle').value = '';">
-                    <img src="https://icons8.com/iconizer/files/Juicy_Fruit/orig/cross.png" width="10" height="10">
+                    <img src="resources/img/cancel.png" width="10" height="10">
                 </button>
                 </c:if>
 
@@ -64,7 +60,7 @@
             enabled <input type="checkbox" id="addEnabled" name="addEnabled" />
             amount <input type="number" id="addAmount"   name="addAmount"  style="width: 40px;"/>
             <button onclick="document.getElementById('').value = ''; " style="padding: 0px; margin: 0 0 0 20px;">
-                <img src="http://image.flaticon.com/icons/png/512/257/257831.png" width="15">
+                <img src="resources/img/save.png" width="15">
             </button>
         </div>
         </c:if>
@@ -83,10 +79,10 @@
                             *
                             </c:when>
                             <c:when test="${requestScope.filter eq 'ACTIVE'}">
-                                <img src="https://d30y9cdsu7xlg0.cloudfront.net/png/9014-200.png" width="12" height="12">
+                                <img src="resources/img/enabled.png" width="12" height="12">
                             </c:when>
                             <c:when test="${requestScope.filter eq 'DISABLED'}">
-                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT9FHwUL0aVSEqDHB62nAniEUPx08jAQ6iEc7r8wjrThYz7Ufhf" width="11" height="11">
+                                <img src="resources/img/disabled.png" width="11" height="11">
                             </c:when>
                         </c:choose>
                     </button>
@@ -95,7 +91,7 @@
                 <td>edt                      </td>
             </tr>
 
-            <c:forEach var="part" items="${parts}" >
+            <c:forEach var="part" varStatus="loopStatus" items="${parts}" >
 
 
                 <tr style="<c:if test="${!part.isEnabled()}">color: silver;</c:if>
@@ -104,7 +100,7 @@
                     <td align="left" class="whiteBG">
                         <button onclick="document.getElementById('deleteID').value = '${part.getId()}';"
                                 style="padding: 0px;">
-                            <img src="https://thumbs.dreamstime.com/b/rood-kruis-12263791.jpg" width="15" height="15">
+                            <img src="resources/img/delete.png" width="15" height="15">
                         </button>
                     </td>
                     <!--Title-->
@@ -121,9 +117,9 @@
                         <c:if test="${empty editIDInt}">
                         <button type="submit" style="border: 0; ${loopStatus.index % 2 == 0 ? 'background-color: #F7F8E0;/>' : 'background-color: #D8D8D8;/>'}" onclick="document.getElementById('activateID').value = '${part.getId()}';">
                             <c:if test="${part.isEnabled()}">
-                                <img src="https://d30y9cdsu7xlg0.cloudfront.net/png/9014-200.png" width="12" height="12"> </c:if>
+                                <img src="resources/img/enabled.png" width="12" height="12"> </c:if>
                             <c:if test="${!part.isEnabled()}">
-                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT9FHwUL0aVSEqDHB62nAniEUPx08jAQ6iEc7r8wjrThYz7Ufhf" width="11" height="11"> </c:if>
+                                <img src="resources/img/disabled.png" width="11" height="11"> </c:if>
                         </button>
                         </c:if>
                         <c:if test="${part.getId() eq editIDInt}">
@@ -143,12 +139,12 @@
                     <td align="right" class="whiteBG">
                         <c:if test="${empty editIDInt}">
                             <button onclick="document.getElementById('editID').value = '${part.getId()}'; " style="padding: 0px;">
-                                <img src="http://icons.iconarchive.com/icons/custom-icon-design/office/256/edit-icon.png" width="15">
+                                <img src="resources/img/edit.png" width="15">
                             </button>
                         </c:if>
                         <c:if test="${part.getId() eq editIDInt}">
                             <button onclick="document.getElementById('updateID').value = '${part.getId()}'; " style="padding: 0px;">
-                                <img src="http://image.flaticon.com/icons/png/512/257/257831.png" width="15">
+                                <img src="resources/img/save.png" width="15">
                             </button>
                         </c:if>
                     </td>

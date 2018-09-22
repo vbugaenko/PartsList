@@ -38,6 +38,7 @@ public class PartsController
             @RequestParam(value = "addTitle",     required = false) String addTitle,
             @RequestParam(value = "addEnabled",   required = false) String addEnabled,
             @RequestParam(value = "addAmount",    required = false) String addAmount,
+            @RequestParam(value = "newFilter",    required = false) String newFilter,
             Model model )
     {
         if ((activateID != null)&&(!activateID.equals("")))
@@ -52,14 +53,14 @@ public class PartsController
         if ((addTitle != null)&&(!addTitle.equals("")))
             partsService.add( addTitle, addEnabled, addAmount );
 
-        List<Part> parts = partsService.getParts( filter, searchTitle, page );
+        List<Part> parts = partsService.getParts( filter, newFilter, searchTitle, page );
 
         model.addAttribute("parts",       parts                          );
         model.addAttribute("page",        page                           );
         model.addAttribute("pagesCalc",   partsService.getPagesCalc()    );
         model.addAttribute("sborka",      partsService.min()             );
         model.addAttribute("editIDInt",   editID                         );
-        model.addAttribute("filter",      partsService.filerEnum(filter) );
+        model.addAttribute("filter",      partsService.getFilter()       );
         model.addAttribute("addNewPart",  addNewPart                     );
         model.addAttribute("searchTitle", searchTitle                    );
         return "index";

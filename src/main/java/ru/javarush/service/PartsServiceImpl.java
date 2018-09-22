@@ -17,11 +17,10 @@ public class PartsServiceImpl implements PartsService
 {
     private PartsDAOImpl partsDAOimpl = new PartsDAOImpl();
     private IntFromStringImpl intFromString = new IntFromStringImpl();
-    private enum Filter { NONE, DISABLED, ACTIVE }
     private List<Part> parts;
     private int page = 1;
     private int pagesCalc=1;
-
+    private Filter filter = Filter.NONE;
     /**
      * limit позволяет варьировать количеством отображаемых записей на странице.
      */
@@ -32,25 +31,40 @@ public class PartsServiceImpl implements PartsService
      * @param filter принимается текущее значение
      * @return выставляется следующее
      */
-    public Enum filerEnum(String filter)
+    private Filter currentFilter(String filter)
     {
-        if ((filter==null)||(filter.equals("DISABLED")))
+        if ((filter==null)||(filter.equals("NONE")))
             return Filter.NONE;
-        if (filter.equals("NONE"))
+        if (filter.equals("ACTIVE"))
             return Filter.ACTIVE;
-        else if (filter.equals("ACTIVE"))
+        else if (filter.equals("DISABLED"))
             return Filter.DISABLED;
 
         return Filter.NONE;
     }
 
+    private Filter newFilter()
+    {
+        if (filter == Filter.NONE)
+            return Filter.ACTIVE;
+        if (filter == Filter.ACTIVE)
+            return Filter.DISABLED;
+        else
+            return Filter.NONE;
+    }
+
     /**
-     * В зависимости от фильтра или наличия задания на поиск используется разный sql запрос.
-     * Фильтрация (enabled) действует по результатам поиска;
+     * Фильтрация (enabled) действует и по результатам поиска, и при движении по страницам;
      */
     @Override
-    public List<Part> getParts(String filter, String search, String pageStr)
+    public List<Part> getParts(String currentFilter, String newFilter, String search, String pageStr)
     {
+        filter = currentFilter(currentFilter);
+
+        if ((newFilter != null)&&(!newFilter.equals("")))
+            filter = newFilter();
+
+
         if ((pageStr != null)&&(!pageStr.equals("")))
             page = intFromString.recognize( pageStr );
 
@@ -58,9 +72,9 @@ public class PartsServiceImpl implements PartsService
         if ((search != null)&&(!search.equals("")))
             searchStr="AND title REGEXP '"+search+"'";
 
-        if (filerEnum(filter) == Filter.ACTIVE)
+        if (filter == Filter.ACTIVE)
             parts = partsDAOimpl.getParts("SELECT SQL_CALC_FOUND_ROWS * FROM parts WHERE enabled=1 "+searchStr+" LIMIT " + begin() + ", "+limit+";");
-        else if (filerEnum(filter) == Filter.DISABLED)
+        else if (filter == Filter.DISABLED)
             parts = partsDAOimpl.getParts("SELECT SQL_CALC_FOUND_ROWS * FROM parts WHERE enabled=0 "+searchStr+" LIMIT " + begin() + ", "+limit+";");
         else
             parts = partsDAOimpl.getParts("SELECT SQL_CALC_FOUND_ROWS * FROM parts WHERE enabled=1 OR enabled=0 "+searchStr+" LIMIT "+ begin() +", "+limit+";");
@@ -144,5 +158,7 @@ public class PartsServiceImpl implements PartsService
     {
         return pagesCalc;
     }
+
+    public Filter getFilter() { return filter; }
 
 }

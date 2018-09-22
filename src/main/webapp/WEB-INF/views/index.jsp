@@ -15,7 +15,7 @@
     <input type="hidden" id="activateID"  name="activateID"           />
     <input type="hidden" id="editID"      name="editID"               />
     <input type="hidden" id="updateID"    name="updateID"             />
-    <input type="hidden" id="filterField" name="filterField"          />
+    <input type="hidden" id="filterField" name="filterField" value="${filter}" />
     <input type="hidden" id="addNewPart"  name="addNewPart"           />
 
     <div class="mainBlocks">
@@ -76,7 +76,8 @@
                 <td width="300 ">Наименование</td>
                 <!--Filter-->
                 <td>
-                    <button type="submit" style="border: 0; ${loopStatus.index % 2 == 0 ? 'background-color: #F7F8E0;/>' : 'background-color: #D8D8D8;/>'}" onclick="document.getElementById('filterField').value = '${filter}';">
+                    <input type="hidden" id="newFilter"  name="newFilter"           />
+                    <button type="submit" style="border: 0; ${loopStatus.index % 2 == 0 ? 'background-color: #F7F8E0;/>' : 'background-color: #D8D8D8;/>'}" onclick="document.getElementById('newFilter').value = '${1}';">
                         <c:choose>
                             <c:when test="${requestScope.filter eq 'NONE'}">
                             *

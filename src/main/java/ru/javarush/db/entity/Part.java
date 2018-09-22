@@ -18,9 +18,9 @@ public class Part
   @Column(name = "id")
   private int id;
   private String title;
+  @Column(name = "enabled")
   private boolean enabled;
   private int amount;
-
 
   public int getId()                       { return id;              }
   public String getTitle()                 { return title;           }

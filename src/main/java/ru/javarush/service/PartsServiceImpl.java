@@ -77,12 +77,15 @@ public class PartsServiceImpl implements PartsService
         if ((search != null)&&(!search.equals("")))
             searchStr="AND title REGEXP '"+search+"'";
 
+        String str;
         if (filter == Filter.ACTIVE)
-            parts = partsDAO.getParts("SELECT SQL_CALC_FOUND_ROWS * FROM parts WHERE enabled=1 "+searchStr+" LIMIT " + begin() + ", "+limit+";");
+            str = "enabled=1";
         else if (filter == Filter.DISABLED)
-            parts = partsDAO.getParts("SELECT SQL_CALC_FOUND_ROWS * FROM parts WHERE enabled=0 "+searchStr+" LIMIT " + begin() + ", "+limit+";");
+            str = "enabled=0";
         else
-            parts = partsDAO.getParts("SELECT SQL_CALC_FOUND_ROWS * FROM parts WHERE enabled=1 OR enabled=0 "+searchStr+" LIMIT "+ begin() +", "+limit+";");
+            str = "enabled=1 OR enabled=0 ";
+
+        parts = partsDAO.getParts("SELECT SQL_CALC_FOUND_ROWS * FROM parts WHERE "+str + searchStr+" LIMIT " + begin() + ", "+limit+";");
 
         pagesCalc = (int)(Math.ceil(partsDAO.pagesCalc()/10.0));
         return parts;

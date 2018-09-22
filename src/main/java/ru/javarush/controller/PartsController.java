@@ -53,8 +53,7 @@ public class PartsController
             partsService.add( addTitle, addEnabled, addAmount );
 
         List<Part> parts = partsService.getParts( filter, searchTitle, page );
-        //Todo!
-        System.out.println("Размер"+parts.size());
+
         model.addAttribute("parts",       parts                          );
         model.addAttribute("page",        page                           );
         model.addAttribute("pagesCalc",   partsService.getPagesCalc()    );

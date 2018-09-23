@@ -11,14 +11,13 @@ import javax.persistence.Table;
  */
 
 @Entity
-@Table(name = "parts")
+@Table(name = "part")
 public class Part
 {
   @Id
   @Column(name = "id")
   private int id;
   private String title;
-  @Column(name = "enabled")
   private boolean enabled;
   private int amount;
 

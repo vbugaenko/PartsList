@@ -26,19 +26,19 @@
                 <!--button: add-->
                 <c:if test="${empty addNewPart}">
                     <button onclick="document.getElementById('addNewPart').value = '1';">
-                        <img src= "resources/img/add.png" width="20" height="20" />
+                        <img class="icons" src= "resources/img/add.png" />
                     </button>
                 </c:if>
-                <!--button: cancel-->
+                <!--button: cancel_for_add-->
                 <c:if test="${not empty addNewPart}">
                     <button onclick="document.getElementById('addNewPart').value = '';">
-                        <img src= "resources/img/yellow_minus.png" width="20" height="20" />
+                        <img class="icons" src= "resources/img/yellow_minus.png" />
                     </button>
                 </c:if>
             </div>
-            <!--Drop-->
-            <input type="hidden" id="drop" name="drop" value="drop" />
-            <button>
+            <!--DropButton-->
+            <input type="hidden" id="drop" name="drop" />
+            <button onclick="document.getElementById('drop').value = 'drop';">
                 Дропнуть
             </button>
             <!--Search-->
@@ -46,66 +46,62 @@
                 <input type="text" id="searchTitle"   name="searchTitle"  placeholder="search by title" value="${searchTitle}"/>
                 <c:if test="${empty searchTitle}">
                 <button>
-                    <img src="resources/img/search.png" width="10" height="10">
+                    <img class="smallIcons" src="resources/img/search.png" />
                 </button>
                 </c:if>
                 <c:if test="${not empty searchTitle}">
                 <button onclick="document.getElementById('searchTitle').value = '';">
-                    <img src="resources/img/cancel.png" width="10" height="10">
+                    <img class="smallIcons" src="resources/img/cancel.png" />
                 </button>
                 </c:if>
 
             </div>
         </div>
 
-        <!--form for add new part-->
+        <!--form_for_add_new_part-->
         <c:if test="${not empty addNewPart}">
-        <div style="clear: both; margin: 40px 0 -20px 0; ">
-            name <input type="text" id="addTitle" name="addTitle" style="width: 140px;" />
-            enabled <input type="checkbox" id="addEnabled" name="addEnabled" />
-            amount <input type="number" id="addAmount"   name="addAmount"  style="width: 40px;"/>
-            <button onclick="document.getElementById('').value = ''; " style="padding: 0px; margin: 0 0 0 20px;">
-                <img src="resources/img/save.png" width="15">
-            </button>
+        <div class="form_for_add_new_part">
+            name    <input type="text"      id="addTitle"   name="addTitle" style="width: 140px;" />
+            enabled <input type="checkbox"  id="addEnabled" name="addEnabled" />
+            amount  <input type="number"    id="addAmount"  name="addAmount" style="width: 40px;"/>
+            <button><img class="icons" src="resources/img/save.png" /></button>
         </div>
         </c:if>
 
         <!--Parts table-->
+        <!--Head_of_table-->
         <table style="clear: both; margin: 40px 0 0 0;">
             <tr class="tableHeader">
                 <td width="30  ">del         </td>
                 <td width="300 ">Наименование</td>
                 <!--Filter-->
-                <td>
-                    <input type="hidden" id="newFilter"  name="newFilter"           />
-                    <button type="submit" style="border: 0; ${loopStatus.index % 2 == 0 ? 'background-color: #F7F8E0;/>' : 'background-color: #D8D8D8;/>'}" onclick="document.getElementById('newFilter').value = '${1}';">
+                <td width="30">
+                    <input type="hidden" id="newFilter" name="newFilter" />
+                    <button type="submit"  onclick="document.getElementById('newFilter').value = '${1}';">
                         <c:choose>
                             <c:when test="${requestScope.filter eq 'NONE'}">
-                            *
+                                <img class="icons" src="resources/img/none.png" />
                             </c:when>
                             <c:when test="${requestScope.filter eq 'ACTIVE'}">
-                                <img src="resources/img/enabled.png" width="12" height="12">
+                                <img class="icons" src="resources/img/enabled.png" />
                             </c:when>
                             <c:when test="${requestScope.filter eq 'DISABLED'}">
-                                <img src="resources/img/disabled.png" width="11" height="11">
+                                <img class="icons" src="resources/img/disabled.png" />
                             </c:when>
                         </c:choose>
                     </button>
                 </td>
-                <td>Количество               </td>
-                <td>edt                      </td>
+                <td width="90">Количество               </td>
+                <td width="30">edt                      </td>
             </tr>
-
+            <!--Body_of_table-->
             <c:forEach var="part" varStatus="loopStatus" items="${parts}" >
-
-
                 <tr style="<c:if test="${!part.isEnabled()}">color: silver;</c:if>
                         background-color: ${loopStatus.index % 2 == 0 ? '#F7F8E0;/>' : '#D8D8D8;/>'}">
                     <!--Delete button-->
                     <td align="left" class="whiteBG">
-                        <button onclick="document.getElementById('deleteID').value = '${part.getId()}';"
-                                style="padding: 0px;">
-                            <img src="resources/img/delete.png" width="15" height="15">
+                        <button class="serviceButton" onclick="document.getElementById('deleteID').value = '${part.getId()}';">
+                            <img class="icons" src="resources/img/delete.png" />
                         </button>
                     </td>
                     <!--Title-->
@@ -122,9 +118,9 @@
                         <c:if test="${empty editIDInt}">
                         <button type="submit" style="border: 0; ${loopStatus.index % 2 == 0 ? 'background-color: #F7F8E0;/>' : 'background-color: #D8D8D8;/>'}" onclick="document.getElementById('activateID').value = '${part.getId()}';">
                             <c:if test="${part.isEnabled()}">
-                                <img src="resources/img/enabled.png" width="12" height="12"> </c:if>
+                                <img class="icons" src="resources/img/enabled.png" /> </c:if>
                             <c:if test="${!part.isEnabled()}">
-                                <img src="resources/img/disabled.png" width="11" height="11"> </c:if>
+                                <img class="icons" src="resources/img/disabled.png" /> </c:if>
                         </button>
                         </c:if>
                         <c:if test="${part.getId() eq editIDInt}">
@@ -143,13 +139,13 @@
                     <!--Edit/Update button-->
                     <td align="right" class="whiteBG">
                         <c:if test="${empty editIDInt}">
-                            <button onclick="document.getElementById('editID').value = '${part.getId()}'; " style="padding: 0px;">
-                                <img src="resources/img/edit.png" width="15">
+                            <button class="serviceButton" onclick="document.getElementById('editID').value = '${part.getId()}';">
+                                <img  class="icons" src="resources/img/edit.png" />
                             </button>
                         </c:if>
                         <c:if test="${part.getId() eq editIDInt}">
-                            <button onclick="document.getElementById('updateID').value = '${part.getId()}'; " style="padding: 0px;">
-                                <img src="resources/img/save.png" width="15">
+                            <button class="serviceButton" onclick="document.getElementById('updateID').value = '${part.getId()}';">
+                                <img  class="icons" src="resources/img/save.png" />
                             </button>
                         </c:if>
                     </td>
@@ -163,7 +159,10 @@
     <div class="mainBlocks">
         <c:forEach  begin="1" end="${pagesCalc}" varStatus="loop" >
             <c:set var="countB" value="${countB+1}"/>
-            <button onclick="document.getElementById('page').value = '${countB}';" >${countB}</button>
+            <button class="<c:if test="${countB eq page}">selected_</c:if>pageButton"
+                    onclick="document.getElementById('page').value = '${countB}';" >
+                    ${countB}
+            </button>
         </c:forEach>
     </div>
 

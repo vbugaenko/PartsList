@@ -31,7 +31,7 @@ body {
     color:              black;
     margin:             20px auto;
     border:             1px solid black;
-    width:              450px;
+    width:              500px;
     padding:            20px;
     background-color:   white;
     text-align:         center;
@@ -43,8 +43,41 @@ body {
     background-color: grey;
     color: white;
     text-align: center;
+    font-weight: bold;
 }
 
 .whiteBG {
     background-color: white;
+}
+
+.pageButton {
+    margin: 5px 0 0 0;
+    width: 40px;
+}
+
+.selected_pageButton {
+    margin: 5px 0 0 0;
+    width: 40px;
+    border: 2px solid black;
+    font-weight: bold;
+    color: maroon;
+}
+
+.serviceButton {
+    padding: 0px;
+}
+
+.smallIcons {
+    width: 10px;
+    height: 10px;
+}
+
+.icons {
+    width: 15px;
+    height: 15px;
+}
+
+.form_for_add_new_part {
+    clear: both;
+    margin: 40px 0 -20px 0;
 }

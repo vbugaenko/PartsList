@@ -94,11 +94,11 @@ public class PartsServiceImpl implements PartsService
     private String where()
     {
         if (filter == ACTIVE)
-            return "WHERE enabled=1";
+            return "WHERE (enabled=1)";
         else if (filter == DISABLED)
-            return "WHERE enabled=0";
+            return "WHERE (enabled=0)";
         else
-            return "WHERE enabled=1 OR enabled=0 ";
+            return "WHERE (enabled=1 OR enabled=0) ";
     }
 
     /**

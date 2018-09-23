@@ -34,7 +34,7 @@ public class PartsServiceImpl implements PartsService
     private FilterEnum filter = NONE;
 
     /**
-     * переменная отвечает за количеством отображаемых записей с запчастями на странице.
+     * переменная отвечает за количество отображаемых записей с запчастями на странице.
      */
     private int limit = 10;
 
@@ -69,13 +69,22 @@ public class PartsServiceImpl implements PartsService
         if ((newFilter != null)&&(!newFilter.equals("")))
             filter = setNewFilter();
 
-        if ((pageStr != null)&&(!pageStr.equals("")))
-            page = intFromString.recognize( pageStr );
+        recognizePage(pageStr);
 
         parts = partsDAO.getParts("SELECT SQL_CALC_FOUND_ROWS * FROM parts " + where() + searchStr(search)+" LIMIT " + begin() + ", "+limit+";");
 
         pagesCalc = (int)(Math.ceil(partsDAO.pagesCalc()/10.0));
         return parts;
+    }
+
+    /**
+     * Метод нужен чтобы определить, какой диапазон записей из БД показывать на странице.
+     * @param pageStr номер страницы
+     */
+    private void recognizePage(String pageStr)
+    {
+        if ((pageStr != null)&&(!pageStr.equals("")))
+            page = intFromString.recognize( pageStr );
     }
 
     /**

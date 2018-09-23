@@ -37,6 +37,7 @@ public class Part
     return "Part{" +
             "id=" + id +
             ", title='" + title + '\'' +
+            ", enabled=" + enabled +
             ", amount=" + amount +
             '}';
   }

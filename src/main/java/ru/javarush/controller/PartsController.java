@@ -56,7 +56,7 @@ public class PartsController
         List<Part> parts = partsService.getParts( filter, newFilter, searchTitle, page );
 
         model.addAttribute("parts",       parts                          );
-        model.addAttribute("page",        page                           );
+        model.addAttribute("page",        partsService.getPage()         );
         model.addAttribute("pagesCalc",   partsService.getPagesCalc()    );
         model.addAttribute("sborka",      partsService.min()             );
         model.addAttribute("editIDInt",   editID                         );

@@ -191,16 +191,24 @@ public class PartsServiceImpl implements PartsService
         return (page-1)*limit;
     }
 
+    @Override
     public int getPagesCalc()
     {
         return pagesCalc;
     }
 
+    @Override
     public FilterEnum getFilter() { return filter; }
 
+    @Override
     public void drop(String dropOrder)
     {
         if ((dropOrder != null)&&(!dropOrder.equals("")))
-        partsDAO.dropDB();
+            partsDAO.dropDB();
+    }
+
+    @Override
+    public int getPage() {
+        return page;
     }
 }

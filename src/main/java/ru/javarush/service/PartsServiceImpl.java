@@ -71,7 +71,7 @@ public class PartsServiceImpl implements PartsService
 
         recognizePage(pageStr);
 
-        parts = partsDAO.getParts("SELECT SQL_CALC_FOUND_ROWS * FROM parts " + where() + searchStr(search)+" LIMIT " + begin() + ", "+limit+";");
+        parts = partsDAO.getParts("SELECT SQL_CALC_FOUND_ROWS * FROM part " + where() + searchStr(search)+" LIMIT " + begin() + ", "+limit+";");
 
         pagesCalc = (int)(Math.ceil(partsDAO.pagesCalc()/10.0));
         return parts;

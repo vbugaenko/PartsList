@@ -36,6 +36,11 @@
                     </button>
                 </c:if>
             </div>
+            <!--Drop-->
+            <input type="hidden" id="drop" name="drop" value="drop" />
+            <button>
+                Дропнуть
+            </button>
             <!--Search-->
             <div style="float:right;" align="right">
                 <input type="text" id="searchTitle"   name="searchTitle"  placeholder="search by title" value="${searchTitle}"/>
@@ -158,7 +163,7 @@
     <div class="mainBlocks">
         <c:forEach  begin="1" end="${pagesCalc}" varStatus="loop" >
             <c:set var="countB" value="${countB+1}"/>
-            <button onclick="document.getElementById('page').value = '${countB}';">${countB}</button>
+            <button onclick="document.getElementById('page').value = '${countB}';" >${countB}</button>
         </c:forEach>
     </div>
 

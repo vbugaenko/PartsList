@@ -24,6 +24,50 @@ public class PartsDAOImpl implements PartsDAO
     private int pagesCalc=1;
 
     @Override
+    public void dropDB()
+    {
+        try ( Session session = cfg.buildSessionFactory().openSession() )
+        {
+            session.beginTransaction();
+            session.createSQLQuery("DROP TABLE IF EXISTS part CASCADE;").executeUpdate();
+            session.createSQLQuery(
+            "CREATE TABLE part(id INT(11) NOT NULL AUTO_INCREMENT, PRIMARY KEY (id)) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8;")
+            .executeUpdate();
+            session.getTransaction().commit();
+        }
+        catch(Exception e)
+        { loggerFileInf.error(e.getMessage()); }
+        dataForDB();
+    }
+
+    @Override
+    public void dataForDB()
+    {
+        try ( Session session = cfg.buildSessionFactory().openSession() )
+        {
+            session.beginTransaction();
+            for (int i = 0; i < 250; i++)
+            session.createSQLQuery("INSERT INTO part (title, enabled, amount) VALUES (:title, :enabled, :amount);")
+                .setParameter("title", "part_"+(100+i))
+                .setParameter("enabled", enabled())
+                .setParameter("amount", rnd()).executeUpdate();
+            session.getTransaction().commit();
+        }
+        catch(Exception e)
+        { loggerFileInf.error(e.getMessage()); }
+    }
+
+    private boolean enabled()
+    {
+        return rnd() > 50 ? true : false;
+    }
+
+    private int rnd()
+    {
+        return (int) (Math.random() * 100);
+    }
+
+    @Override
     public void deletePart(int id)
     {
         try (Session session = cfg.buildSessionFactory().openSession())
@@ -32,7 +76,6 @@ public class PartsDAOImpl implements PartsDAO
             Part part = session.get(Part.class, id);
             session.remove(part);
             session.getTransaction().commit();
-            session.close();
         }
         catch(Exception e)
         { loggerFileInf.error(e.getMessage()); }
@@ -46,7 +89,6 @@ public class PartsDAOImpl implements PartsDAO
             session.beginTransaction();
             session.save(part);
             session.getTransaction().commit();
-            session.close();
         }
         catch(Exception e)
         { loggerFileInf.error(e.getMessage()); }
@@ -60,7 +102,6 @@ public class PartsDAOImpl implements PartsDAO
             session.beginTransaction();
             session.update(part);
             session.getTransaction().commit();
-            session.close();
         }
         catch(Exception e)
         { loggerFileInf.error(e.getMessage()); }
@@ -83,7 +124,6 @@ public class PartsDAOImpl implements PartsDAO
 
             //Todo: java.math.BigInteger cannot be cast to java.lang.Integer ??
             pagesCalc = Integer.parseInt(query.list().get(0).toString());
-            session.close();
         }
         catch (Exception e)
         { loggerFileInf.error(e.getMessage()); }
@@ -100,7 +140,6 @@ public class PartsDAOImpl implements PartsDAO
             part.setEnabled(!part.isEnabled());
             session.update(part);
             session.getTransaction().commit();
-            session.close();
         }
         catch(Exception e)
         { loggerFileInf.error(e.getMessage()); }

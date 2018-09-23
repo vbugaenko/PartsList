@@ -6,6 +6,7 @@ import java.util.List;
 
 public interface PartsService
 {
+    void drop(String drop);
     enum FilterEnum { NONE, DISABLED, ACTIVE }
     List<Part> getParts(String filter, String newFilter, String search, String page);
     void delete(String id);

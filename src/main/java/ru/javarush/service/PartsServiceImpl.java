@@ -198,4 +198,9 @@ public class PartsServiceImpl implements PartsService
 
     public FilterEnum getFilter() { return filter; }
 
+    public void drop(String dropOrder)
+    {
+        if ((dropOrder != null)&&(!dropOrder.equals("")))
+        partsDAO.dropDB();
+    }
 }

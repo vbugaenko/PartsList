@@ -44,12 +44,14 @@ public class PartsController
             @RequestParam(value = "addEnabled",   required = false) String addEnabled,
             @RequestParam(value = "addAmount",    required = false) String addAmount,
             @RequestParam(value = "newFilter",    required = false) String newFilter,
+            @RequestParam(value = "drop",         required = false) String drop,
             Model model )
     {
             partsService.changeEnabledStatus( activateID );
             partsService.update( updateID, updateTitle,saveEnabled, updateAmount );
             partsService.delete( deleteID );
             partsService.add( addTitle, addEnabled, addAmount );
+            partsService.drop( drop );
 
         List<Part> parts = partsService.getParts( filter, newFilter, searchTitle, page );
 

@@ -11,6 +11,8 @@ import java.util.List;
 
 public interface PartsDAO
 {
+    void dropDB              ();
+    void dataForDB           ();
     void deletePart          ( int id     );
     void addPart             ( Part part  );
     void updatePart          ( Part part  );

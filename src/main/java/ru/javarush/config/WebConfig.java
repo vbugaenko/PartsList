@@ -21,21 +21,16 @@ import ru.javarush.service.utility.IntFromStringImpl;
  */
 
 @Configuration
-@EnableWebMvc   // включает Spring MVC без дополнительных xml настроек
+@EnableWebMvc
 @ComponentScan("ru.javarush.controller")
 public class WebConfig extends WebMvcConfigurerAdapter
 {
-    // в Spring существует 2 способа обработки статических ресурсов
-    // но подход "Сервлет по умолчанию" (configureDefaultServletHandling) не подходит
-    // для обслуживания статических ресурсов поэтому используем именно метод addResourceHandlers.
-    // при этом подразумевается, что каталог /resources находится в каталоге /webapp
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry)
     {
         registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
     }
 
-    //бин типа ViewResolver помогает DispatcherServlet определить нужную JSP для отображения.
     @Bean
     public InternalResourceViewResolver setupViewResolver()
     {

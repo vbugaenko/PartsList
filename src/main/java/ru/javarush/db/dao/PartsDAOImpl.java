@@ -9,6 +9,7 @@ import ru.javarush.db.entity.Part;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * @author Victor Bugaenko
@@ -64,7 +65,7 @@ public class PartsDAOImpl implements PartsDAO
 
     private int rnd()
     {
-        return (int) (Math.random() * 100);
+        return new Random().nextInt(100);
     }
 
     @Override

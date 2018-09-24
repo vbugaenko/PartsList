@@ -32,11 +32,7 @@ public class PartsServiceImpl implements PartsService
     private int page = 1;
     private int pagesByQuery = 1;
     private FilterEnum filter = NONE;
-
-    /**
-     * переменная отвечает за количество отображаемых записей с запчастями на странице.
-     */
-    private int limit = 10;
+    private int limitOfRecordsOnPage = 10;
 
     /**
      * Метод распознает текущий фильтр (из строки в enum).
@@ -71,7 +67,7 @@ public class PartsServiceImpl implements PartsService
 
         recognizePage(pageStr);
 
-        parts = partsDAO.getParts("SELECT SQL_CALC_FOUND_ROWS * FROM part " + where() + searchStr(search)+" LIMIT " + begin() + ", "+limit+";");
+        parts = partsDAO.getParts("SELECT SQL_CALC_FOUND_ROWS * FROM part " + where() + searchStr(search)+" LIMIT " + begin() + ", "+limitOfRecordsOnPage+";");
 
         pagesByQuery = (int)(Math.ceil(partsDAO.getHowManyRecordsByQuery()/10.0));
         return parts;
@@ -188,7 +184,7 @@ public class PartsServiceImpl implements PartsService
 
     private int begin()
     {
-        return (page-1)*limit;
+        return (page-1)*limitOfRecordsOnPage;
     }
 
     @Override

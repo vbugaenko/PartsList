@@ -55,7 +55,7 @@ public class PartsServiceImpl implements PartsService
     }
 
     /**
-     * Фильтрация (enabled) действует и по результатам поиска, и при движении по страницам;
+     * Метод возвращает список запчастей с учетом фильтра, условием поиска, и на выбранной пользователем странице.
      */
     @Override
     public List<Part> getParts(String currentFilter, String newFilter, String search, String pageStr)

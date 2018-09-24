@@ -21,7 +21,7 @@ public class PartsDAOImpl implements PartsDAO
     private Configuration cfg = new org.hibernate.cfg.Configuration().configure("hibernate.cfg.xml");
     private final Logger loggerFileInf = Logger.getLogger("fileinf");
     private final Logger loggerConsoleInf = Logger.getLogger("consoleinf");
-    private int pagesCalc=1;
+    private int howManyRecordsByQuery=1;
 
     @Override
     public void dropDB()
@@ -123,7 +123,7 @@ public class PartsDAOImpl implements PartsDAO
             query = session.createNativeQuery( "SELECT FOUND_ROWS();" );
 
             //Todo: java.math.BigInteger cannot be cast to java.lang.Integer ??
-            pagesCalc = Integer.parseInt(query.list().get(0).toString());
+            howManyRecordsByQuery = Integer.parseInt(query.list().get(0).toString());
         }
         catch (Exception e)
         { loggerFileInf.error(e.getMessage()); }
@@ -146,9 +146,9 @@ public class PartsDAOImpl implements PartsDAO
     }
 
     @Override
-    public int pagesCalc()
+    public int getHowManyRecordsByQuery()
     {
-        return pagesCalc;
+        return howManyRecordsByQuery;
     }
 
 }

@@ -21,9 +21,6 @@ import java.util.List;
 @Controller
 public class PartsController
 {
-    private final Logger loggerFileInf = Logger.getLogger("fileinf");
-    private final Logger loggerConsoleInf = Logger.getLogger("consoleinf");
-
     @Autowired
     private PartsService partsService;
 
@@ -55,14 +52,14 @@ public class PartsController
 
         List<Part> parts = partsService.getParts( filter, newFilter, searchTitle, page );
 
-        model.addAttribute("parts",       parts                          );
-        model.addAttribute("page",        partsService.getPage()         );
-        model.addAttribute("pagesCalc",   partsService.getPagesCalc()    );
-        model.addAttribute("sborka",      partsService.min()             );
-        model.addAttribute("editIDInt",   editID                         );
-        model.addAttribute("filter",      partsService.getFilter()       );
-        model.addAttribute("addNewPart",  addNewPart                     );
-        model.addAttribute("searchTitle", searchTitle                    );
+        model.addAttribute("parts",       parts                           );
+        model.addAttribute("page",        partsService.getPage()          );
+        model.addAttribute("pagesCalc",   partsService.getPagesByQuery()  );
+        model.addAttribute("sborka",      partsService.min()              );
+        model.addAttribute("editIDInt",   editID                          );
+        model.addAttribute("filter",      partsService.getFilter()        );
+        model.addAttribute("addNewPart",  addNewPart                      );
+        model.addAttribute("searchTitle", searchTitle                     );
         return "index";
     }
 

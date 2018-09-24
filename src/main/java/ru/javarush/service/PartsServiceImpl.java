@@ -49,6 +49,7 @@ public class PartsServiceImpl implements PartsService
      */
     private FilterEnum setNewFilter()
     {
+        currentSelectedPage=1; // иначе после применения фильтра можно остаться на не адекватной странице
         if (filter == NONE)   return ACTIVE;
         if (filter == ACTIVE) return DISABLED;
         else return NONE;
@@ -60,12 +61,11 @@ public class PartsServiceImpl implements PartsService
     @Override
     public List<Part> getParts(String currentFilter, String newFilter, String search, String pageStr)
     {
-        filter = recognizeCurrentFilter(currentFilter);
+        recognizePage(pageStr);
 
+        filter = recognizeCurrentFilter(currentFilter);
         if ((newFilter != null)&&(!newFilter.equals("")))
             filter = setNewFilter();
-
-        recognizePage(pageStr);
 
         parts = partsDAO.getParts("SELECT SQL_CALC_FOUND_ROWS * FROM part " + where() + searchStr(search)+" LIMIT " + begin() + ", "+limitOfRecordsOnPage+";");
 

@@ -7,7 +7,7 @@ import java.util.List;
 public interface PartsService
 {
     void drop(String drop);
-    int getPage();
+    int currentSelectedPage();
     enum FilterEnum { NONE, DISABLED, ACTIVE }
     List<Part> getParts(String filter, String newFilter, String search, String page);
     void delete(String id);

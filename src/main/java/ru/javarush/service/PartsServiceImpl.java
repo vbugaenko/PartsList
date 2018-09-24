@@ -29,7 +29,7 @@ public class PartsServiceImpl implements PartsService
     @Autowired
     private IntFromString intFromString;
     private List<Part> parts;
-    private int page = 1;
+    private int currentSelectedPage = 1;
     private int pagesByQuery = 1;
     private FilterEnum filter = NONE;
     private int limitOfRecordsOnPage = 10;
@@ -80,7 +80,7 @@ public class PartsServiceImpl implements PartsService
     private void recognizePage(String pageStr)
     {
         if ((pageStr != null)&&(!pageStr.equals("")))
-            page = intFromString.recognize( pageStr );
+            currentSelectedPage = intFromString.recognize( pageStr );
     }
 
     /**
@@ -184,7 +184,7 @@ public class PartsServiceImpl implements PartsService
 
     private int begin()
     {
-        return (page-1)*limitOfRecordsOnPage;
+        return (currentSelectedPage-1)*limitOfRecordsOnPage;
     }
 
     @Override
@@ -204,7 +204,7 @@ public class PartsServiceImpl implements PartsService
     }
 
     @Override
-    public int getPage() {
-        return page;
+    public int currentSelectedPage() {
+        return currentSelectedPage;
     }
 }

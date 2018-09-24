@@ -30,7 +30,7 @@ public class PartsServiceImpl implements PartsService
     private IntFromString intFromString;
     private List<Part> parts;
     private int currentSelectedPage = 1;
-    private int pagesByQuery = 1;
+    private int amountPagesByQuery = 1;
     private FilterEnum filter = NONE;
     private int limitOfRecordsOnPage = 10;
 
@@ -69,7 +69,7 @@ public class PartsServiceImpl implements PartsService
 
         parts = partsDAO.getParts("SELECT SQL_CALC_FOUND_ROWS * FROM part " + where() + searchStr(search)+" LIMIT " + begin() + ", "+limitOfRecordsOnPage+";");
 
-        pagesByQuery = (int)(Math.ceil(partsDAO.getHowManyRecordsByQuery()/10.0));
+        amountPagesByQuery = (int)(Math.ceil(partsDAO.getHowManyRecordsByQuery()/10.0));
         return parts;
     }
 
@@ -188,9 +188,9 @@ public class PartsServiceImpl implements PartsService
     }
 
     @Override
-    public int getPagesByQuery()
+    public int getAmountPagesByQuery()
     {
-        return pagesByQuery;
+        return amountPagesByQuery;
     }
 
     @Override

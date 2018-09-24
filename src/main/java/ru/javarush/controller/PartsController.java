@@ -1,6 +1,5 @@
 package ru.javarush.controller;
 
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -52,14 +51,14 @@ public class PartsController
 
         List<Part> parts = partsService.getParts( filter, newFilter, searchTitle, page );
 
-        model.addAttribute("parts",       parts                               );
-        model.addAttribute("page",        partsService.currentSelectedPage()  );
-        model.addAttribute("pagesCalc",   partsService.getPagesByQuery()      );
-        model.addAttribute("sborka",      partsService.min()                  );
-        model.addAttribute("editIDInt",   editID                              );
-        model.addAttribute("filter",      partsService.getFilter()            );
-        model.addAttribute("addNewPart",  addNewPart                          );
-        model.addAttribute("searchTitle", searchTitle                         );
+        model.addAttribute("parts",       parts                                );
+        model.addAttribute("page",        partsService.currentSelectedPage()   );
+        model.addAttribute("pagesCalc",   partsService.getAmountPagesByQuery() );
+        model.addAttribute("sborka",      partsService.min()                   );
+        model.addAttribute("editIDInt",   editID                               );
+        model.addAttribute("filter",      partsService.getFilter()             );
+        model.addAttribute("addNewPart",  addNewPart                           );
+        model.addAttribute("searchTitle", searchTitle                          );
         return "index";
     }
 

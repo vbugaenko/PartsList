@@ -17,6 +17,6 @@ public interface PartsService
     void add(String addTitle, String addEnabled, String addAmount);
     void update(String updateID, String updateTitle, boolean saveEnabled, String updateAmount);
     int min();
-    int getPagesByQuery();
+    int getAmountPagesByQuery();
     FilterEnum getFilter();
 }

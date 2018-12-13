@@ -3,8 +3,7 @@ package ru.javarush.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import ru.javarush.db.entity.Part;
@@ -23,7 +22,8 @@ public class PartsController
     @Autowired
     private PartsService partsService;
 
-    @RequestMapping(value="/", method = RequestMethod.GET)
+    //@RequestMapping(value="/", method = RequestMethod.GET)
+    @GetMapping("/")
     public String partsListWithFilters(
             @RequestParam(value = "page",         required = false) String page,
             @RequestParam(value = "deleteID",     required = false) String deleteID,
@@ -59,6 +59,7 @@ public class PartsController
         model.addAttribute("filter",      partsService.getFilter()             );
         model.addAttribute("addNewPart",  addNewPart                           );
         model.addAttribute("searchTitle", searchTitle                          );
+
         return "index";
     }
 
